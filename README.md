@@ -1,3 +1,15 @@
+# Fairy Garden
+
+Fairy Garden is a tower defense game where you'd love for the invaders to stay,
+but they'd hate to impose.
+
+Plans:
+
+1. Implement "camera" moving around playing field selecting
+  - (Needs to highlight current cell, move instantly)
+2. Implement "tower" purchase (flowers)
+
+
 # Playdate Fennel Starter
 
 This starter set is intended to allow use of the Fennel language on Playdate,

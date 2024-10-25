@@ -62,8 +62,6 @@
         (if (?. entity :add) (entity:add))
         entity)))
 
-  ;; TODO: Make a level parser that can take entities map and prep a full level
-  ;; (normalize the code from calm-sea and standardize)
   (fn prepare-level! [level-data entity-map layer-details]
     (let [loaded (prepare-level level-data)
           layers (icollect [_ {: layer-enums &as layer} (ipairs loaded.tile-layers)]

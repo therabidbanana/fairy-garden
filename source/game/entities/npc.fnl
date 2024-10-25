@@ -43,14 +43,13 @@
   ;;   (other:collisionResponse))
 
   (fn new! [x y {: tile-h : tile-w}]
-    (let [image (gfx.imagetable.new :assets/images/pineapple-walk)
-          animation (anim.new {: image :states [{:state :standing :start 1 :end 1 :delay 2300 :transition-to :blinking}
-                                                {:state :blinking :start 2 :end 3 :delay 300 :transition-to :pace}
-                                                {:state :pace :start 4 :end 5 :delay 500 :transition-to :standing}
-                                                {:state :walking :start 4 :end 5}]})
+    (let [image (gfx.imagetable.new :assets/images/fairy-sprite)
+          animation (anim.new {: image :states [{:state :standing :start 1 :end 2 :delay 2300}
+                                                {:state :walking :start 1 :end 2}
+                                                ]})
           player (gfx.sprite.new)]
       (player:setCenter 0 0)
-      (player:setBounds x y 32 32)
+      (player:setBounds x y 24 24)
       ;; (player:setCollideRect 6 1 18 30)
       (player:setCollideRect 0 0 32 32)
       (player:setGroups [3])

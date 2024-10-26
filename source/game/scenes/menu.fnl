@@ -9,16 +9,7 @@
 
   (local state {})
   (fn enter! [$]
-    ($ui:open-menu! {:options [{:text "Foo" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2") :nametag "LovingNameTAG"})}
-                               {:text "Bar [!]" :action #(scene-manager:select! :level_0)}
-                               {:text "Quux" :action #($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")})}
-                               {:text "Qux" :keep-open? true}
-                               {:text "Corge"}
-                               {:text "Grault"}
-                               {:text "Garply"}
-                               {:text "Corge"}
-                               {:text "Grault"}
-                               {:text "Garply"}
+    ($ui:open-menu! {:options [{:text "Play [!]" :action #(scene-manager:select! :level_0)}
                                ]})
     ;; (tset $ :state :listview (testScroll pd gfx))
     )

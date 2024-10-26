@@ -8,7 +8,6 @@
    anim (require :source.lib.animation)]
 
   (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self}]
-    
     (let [(dx dy) (self:tile-movement-react! state.speed)]
       (if (and (= dx 0) (= dy 0))
           (case (math.random 0 100)

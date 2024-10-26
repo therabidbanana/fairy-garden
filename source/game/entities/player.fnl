@@ -70,7 +70,7 @@
       (tset player :player? true)
       (tset player :update update)
       (tset player :react! react!)
-      (tset player :state {: animation :speed 2 :dx 0 :dy 0 :visible true})
+      (tset player :state {: animation :speed 4 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})
       player)))
 

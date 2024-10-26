@@ -10,7 +10,7 @@
   [{: split} (require :source.lib.helpers)]
 
   (fn getImage [{: quads : atlas} n]
-    {:draw (fn [x y]
+    {:draw (fn [self x y]
              ;; (love.graphics.push :all)
              ;; (love.graphics.setColor 1 1 1 1)
              (love.graphics.draw atlas (?. quads n) x y)

@@ -33,11 +33,12 @@
       (tset self :state :dx 0)
       (tset self :state :dy 0)
       (if (> count 0) (self:->stop!))
+      (self:setImage (animation:getImage))
       (self:markDirty))
     )
 
-  (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
-    (animation:draw x y))
+  ;; (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
+  ;;   (animation:draw x y))
 
   ;; (fn collisionResponse [self other]
   ;;   (other:collisionResponse))
@@ -54,7 +55,7 @@
       (player:setCollideRect 0 0 32 32)
       (player:setGroups [3])
       (player:setCollidesWithGroups [1 4])
-      (tset player :draw draw)
+      ;; (tset player :draw draw)
       (tset player :update update)
       (tset player :react! react!)
       (tset player :tile-h tile-h)

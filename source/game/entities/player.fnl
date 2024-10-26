@@ -45,13 +45,14 @@
           target-y (+ dy self.y)
           (x y collisions count) (self:moveWithCollisions target-x target-y)]
       x)
+    (self:setImage (animation:getImage))
     (self:markDirty)
     )
 
-  (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
-    ;; (love.graphics.rectangle "fill" x y w h)
-    (animation:draw x y)
-    )
+  ;; (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
+  ;;   ;; (love.graphics.rectangle "fill" x y w h)
+  ;;   (animation:draw x y)
+  ;;   )
 
   (fn collisionResponse [self other]
     (other:collisionResponse))
@@ -65,7 +66,7 @@
       (player:setCollideRect 6 1 18 30)
       (player:setGroups [1])
       (player:setCollidesWithGroups [])
-      (tset player :draw draw)
+      ;; (tset player :draw draw)
       (tset player :player? true)
       (tset player :update update)
       (tset player :react! react!)

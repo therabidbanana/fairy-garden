@@ -36,7 +36,7 @@
             ;; (tset $ :frame (math.min $.frame $.startFrame))
             )
           )
-      ($.image:drawImage (+ $.startFrame $.__frame) x y)))
+      ($._image:drawImage (+ $.startFrame $.__frame) x y)))
 
   (fn isValid [self]
     (if self.finished
@@ -48,17 +48,20 @@
   (fn remove [self]
     (self.timer:remove))
 
-  (fn new [delay image shouldLoop]
+  (fn image [self]
+    (self._image:getImage (+ self.startFrame self.__frame)))
+
+  (fn new [delay _image shouldLoop]
     (let [__frame 0
           __state {}
           startFrame 1
-          endFrame (length image.quads)
+          endFrame (length _image.quads)
           finished false
           shouldLoop (if (= shouldLoop nil) true shouldLoop)
           timer (timer-lib.new delay)
           item { : startFrame : endFrame : __frame : finished
                  : shouldLoop : timer : __state
-                 : image : delay : isValid : draw : remove }]
+                 : _image : image : delay : isValid : draw : remove }]
       (tset timer :discardOnCompletion false)
       (setmetatable item {:__index (fn [tbl key]
                                      (if (= :paused key)

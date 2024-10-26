@@ -6,7 +6,7 @@ but they'd hate to impose.
 Plans:
 
 1. Implement "camera" moving around playing field selecting
-  - (Needs to highlight current cell, move instantly)
+  - (move instantly, fix offsets in playdate - causing sprite tears)
 2. Implement "tower" purchase (flowers)
 
 

@@ -32,8 +32,8 @@
       (tset self :state :dy dy)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
 
-      ;; (if (playdate.buttonJustPressed playdate.kButtonB)
-      ;;     (scene-manager:select! :menu))
+      (if (playdate.buttonJustPressed playdate.kButtonB)
+          (scene-manager:select! :menu))
       (if (and (playdate.buttonJustPressed playdate.kButtonA)
                facing-sprite)
           ($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")}))
@@ -57,8 +57,8 @@
     (other:collisionResponse))
 
   (fn new! [x y {: tile-w : tile-h}]
-    (let [image (gfx.imagetable.new :assets/images/fairy-sprite)
-          animation (anim.new {: image :states [{:state :walking :start 4 :end 5}]})
+    (let [image (gfx.imagetable.new :assets/images/player-sprite)
+          animation (anim.new {: image :states [{:state :walking :start 1 :end 4}]})
           player (gfx.sprite.new)]
       (player:setCenter 0 0)
       (player:setBounds x y 32 32)

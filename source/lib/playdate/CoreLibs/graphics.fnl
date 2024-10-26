@@ -19,6 +19,8 @@
   (local kDrawModeFillWhite "fillWhite")
   (local kDrawModeFillBlack "fillBlack")
   (local _mode kDrawModeCopy)
+  (local _tx 0)
+  (local _ty 0)
   (local strings {})
 
   (fn getDisplayImage []
@@ -55,9 +57,16 @@
   (fn clear [] (love.graphics.clear))
   (local graphics-stack [])
 
-  (fn setDrawOffset [x y] "TODO")
+  (fn setDrawOffset [x y]
+    (tset _G.playdate.graphics :_tx x)
+    (tset _G.playdate.graphics :_ty y)
+    ;; Doesn't work right, we may have to shift everything ourselves
+    (love.graphics.translate x y)
+    )
   (fn pushContext [image?]
-    (let [curr-context {:mode  _mode}]
+    (let [curr-context {:mode  _mode
+                        :tx    _tx
+                        :ty    _ty}]
       ;; TODO - handle set canvas
       (table.insert graphics-stack curr-context)
       (love.graphics.push :all)
@@ -70,6 +79,7 @@
           (do
             (love.graphics.pop)
             (setImageDrawMode prev-context.mode)
+            (setDrawOffset prev-context.tx prev-context.ty)
             ))
       ))
 

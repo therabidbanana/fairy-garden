@@ -6,9 +6,11 @@ but they'd hate to impose.
 Plans:
 
 - [x] Implement "camera" moving around playing field selecting
-- [ ] Tower purchase menu
 - [ ] Fairy fly to tree
+- [ ] Fairy redirect item
+- [ ] Adding obstruction ?
 - [ ] Fairy spawner
+- [ ] Tower purchase menu
 
 
 # Playdate Fennel Starter

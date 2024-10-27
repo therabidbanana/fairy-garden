@@ -7,25 +7,52 @@
    $ui (require :source.lib.ui)
    anim (require :source.lib.animation)]
 
-  (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self}]
+  (fn plan-next-step [state {:state {: graph : graph-locations : grid-w} &as scene}]
+    (let [goal
+          (?. graph-locations :tree)
+          ;; (case state.state
+          ;;        :order (?. graph-locations :wait)
+          ;;        :leave (?. graph-locations :exit)
+          ;;        _ nil)
+          ;; TODO: XY on nodes seems +1 each way. coords 1 based?
+          curr (if goal (graph:nodeWithID (+ (* grid-w state.tile-y) (+ state.tile-x 1))))
+          ;; curr (if goal (graph:nodeWithXY (+ (inspect state.tile-y) 1) (+ (inspect state.tile-x) 1)))
+          path (if curr (graph:findPath curr goal))
+          ;; _ (inspect {:x curr.x :y curr.y})
+          ;; _ (inspect (curr:connectedNodes))
+          ;; _ (inspect path)
+          next-step (?. path 2)]
+      (if
+       (and (= (?. curr :x) (?. goal :x)) (= (?. curr :y) (?. goal :y))) :at-goal
+       (= (type next-step) "nil") :pause
+       (< (- next-step.y 1) state.tile-y) :up
+       (> (- next-step.x 1) state.tile-x) :right
+       (< (- next-step.x 1) state.tile-x) :left
+       (> (- next-step.y 1) state.tile-y) :down
+       :pause)))
+
+  (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self} map-state]
     (let [(dx dy) (self:tile-movement-react! state.speed)]
       (if (and (= dx 0) (= dy 0))
-          (case (math.random 0 100)
-            1 (self:->left!)
-            2 (self:->right!)
-            3 (self:->up!)
-            4 (self:->down!)
-            _ nil))
+          (case (plan-next-step state map-state)
+            :up (self:->up!)
+            :down (self:->down!)
+            :left (self:->left!)
+            :right (self:->right!)
+            ))
       (tset self :state :dx dx)
       (tset self :state :dy dy)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
       )
     self)
 
+
   (fn update [{:state {: animation : dx : dy : walking?} &as self}]
     (let [target-x (+ dx self.x)
           target-y (+ dy self.y)
-          (x y collisions count) (self:moveWithCollisions target-x target-y)]
+          (x y collisions count) (self:moveWithCollisions target-x target-y)
+
+          ]
       (if walking?
           (animation:transition! :walking)
           (animation:transition! :standing {:if :walking}))
@@ -35,6 +62,7 @@
       (self:setImage (animation:getImage))
       (self:markDirty))
     )
+
 
   ;; (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
   ;;   (animation:draw x y))

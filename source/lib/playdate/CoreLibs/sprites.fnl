@@ -61,6 +61,10 @@
    (tset sprite-state :sprites [])
    )
 
+ (fn getAllSprites []
+   (?. sprite-state :sprites)
+   )
+
  (fn overlappingSprites [self]
    (if self.collisionBox
        (icollect [i sprite (ipairs sprite-state.sprites)]

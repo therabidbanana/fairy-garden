@@ -15,7 +15,8 @@
           ;; loaded (prepare-level! (ldtk.load-level {:level 0}) entity-map)
           ;; Option 2 - relies on deflevel compiling
           {: stage-width : stage-height
-           &as loaded} (prepare-level! level_0 entity-map)
+           &as loaded} (prepare-level! level_0 entity-map {:floor {:z-index -110}
+                                                           :tiles {:z-index 10}})
           player (?. (icollect [_ v (ipairs loaded.entities)]
                        (if (?. v :player?) v)) 1)
           ]

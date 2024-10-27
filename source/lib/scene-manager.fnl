@@ -59,11 +59,16 @@
     (if (and active (?. active :draw!)) (active:draw!))
     )
 
+  (fn debug-draw! [{: active : fade-out-anim : last-screen &as $}]
+    (if (and $config.debug active (?. active :debug-draw!)) (active:debug-draw!))
+    )
+
   {: add-scene!
    : load-scenes!
    : exit-scene!
    : select!
    : draw!
+   : debug-draw!
    : transition-draw!
    : reset-state!
    : tick!

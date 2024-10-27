@@ -1,4 +1,4 @@
-(import-macros {: defmodule : inspect} :source.lib.macros)
+(import-macros {: defmodule : inspect : div} :source.lib.macros)
 
 (if (not (?. _G.playdate :graphics))
     (tset _G.playdate :graphics {}))
@@ -13,6 +13,7 @@
   (local current-font default-font)
   (local COLOR_WHITE { :r (/ 176 255) :g (/ 174 255) :b (/ 167 255) })
   (local COLOR_BLACK { :r (/ 49  255) :g (/ 47  255) :b (/ 40  255)  })
+  (local COLOR_DEBUG { :r (/ 255  255) :g (/ 12  255) :b (/ 12  255)  })
   (local kColorBlack COLOR_BLACK)
   (local kColorWhite COLOR_WHITE)
   (local kDrawModeCopy "copy")
@@ -149,6 +150,34 @@
       (love.graphics.rectangle "line" x y (or width w) (or height h) radius radius)
       )
     (love.graphics.pop))
+
+  (fn drawLine [x1 y1 x2 y2]
+    (love.graphics.push :all)
+    ;; (love.graphics.setLineWidth 2)
+    (love.graphics.setColor _G.playdate.graphics._fg.r
+                            _G.playdate.graphics._fg.g
+                            _G.playdate.graphics._fg.b)
+    (love.graphics.line x1 y1 x2 y2)
+    (love.graphics.pop))
+
+  (fn drawCircleInRect [& rest]
+    (love.graphics.push :all)
+    (love.graphics.setColor _G.playdate.graphics._fg.r
+                            _G.playdate.graphics._fg.g
+                            _G.playdate.graphics._fg.b)
+    (case rest
+      [x y width height]
+      (let [x-rad (div width 2)
+            y-rad (div height 2)]
+        (love.graphics.ellipse "line" (+ x x-rad) (+ y y-rad)
+                               x-rad y-rad))
+      [{: x : y : width : height}]
+      (let [x-rad (div width 2)
+            y-rad (div height 2)]
+        (love.graphics.ellipse "line" (+ x x-rad) (+ y y-rad)
+                               x-rad y-rad)))
+    (love.graphics.pop)
+    )
 
   (fn lockFocus [canvas]
     (love.graphics.push :all)

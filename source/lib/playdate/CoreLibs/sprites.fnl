@@ -88,6 +88,9 @@
    (tset self :width w)
    (tset self :height h))
 
+ (fn getBoundsRect [self]
+   (_G.playdate.geometry.rect.new self.x self.y self.width self.height))
+
  (fn setCenter [self x y] "TODO")
  (fn setSize [self w h] "TODO")
  (fn setImage [self image] (tset self :image image))

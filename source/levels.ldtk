@@ -298,7 +298,7 @@
 			"allowOutOfBounds": false,
 			"doc": null,
 			"width": 64,
-			"height": 64,
+			"height": 32,
 			"resizableX": false,
 			"resizableY": false,
 			"minWidth": null,
@@ -490,19 +490,19 @@
 						},
 						{
 							"__identifier": "tree",
-							"__grid": [5,1],
+							"__grid": [5,2],
 							"__pivot": [0,0],
 							"__tags": [],
 							"__tile": null,
 							"__smartColor": "#EAD4AA",
 							"iid": "0b8eb6a0-73f0-11ef-8ff4-41b87e127bf7",
 							"width": 64,
-							"height": 64,
+							"height": 32,
 							"defUid": 18,
-							"px": [160,32],
+							"px": [160,64],
 							"fieldInstances": [],
 							"__worldX": 160,
-							"__worldY": 32
+							"__worldY": 64
 						},
 						{
 							"__identifier": "fairy",

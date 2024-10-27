@@ -10,9 +10,9 @@
   ;; (fn collisionResponse [self other]
   ;;   (other:collisionResponse))
 
-  (fn new! [x y {: tile-h : tile-w :layer-details {: node-list : grid-w : locations}}]
+  (fn new! [x y {: tile-h : tile-w :layer-details { : grid-w : locations}}]
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)]
-      (tset node-list (+ (* tile-y grid-w) (+ tile-x 1)) 1)
+      ;; (tset node-list (+ (* tile-y grid-w) (+ tile-x 1)) 1)
       (tset locations :tree {: tile-x : tile-y})
       nil)))

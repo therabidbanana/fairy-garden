@@ -6,47 +6,34 @@
    ;; ldtk (require :source.lib.ldtk.loader)
    {: prepare-level!} (require :source.lib.level)
    $ui (require :source.lib.ui)
+   graph (require :source.lib.graph)
    pd playdate
    gfx pd.graphics]
 
-  (fn -node-list! [size]
-    (local t {})
-    (for [i 1 size]
-      (tset t i 1))
-    t)
-
   (fn enter! [$]
     (let [
-          ;; Option 1 - Loads at runtime
-          ;; loaded (prepare-level! (ldtk.load-level {:level 0}) entity-map)
-          ;; Option 2 - relies on deflevel compiling
           tile-size 32
           grid-w (div level_0.w tile-size)
           grid-h (div level_0.h tile-size)
-          node-list (-node-list! (* grid-w grid-h))
           locations {}
 
           {: stage-width : stage-height
            &as loaded} (prepare-level! level_0 entity-map {:floor {:z-index -110}
-                                                           :tree  { : locations : node-list : grid-w : grid-h}
-                                                           :tiles {:z-index 10}})
-          _ (each [_ v (ipairs (playdate.graphics.sprite.getAllSprites))]
-              (if (?. v :wall?)
-                  (let [tile-x (div v.x tile-size)
-                        tile-y (div v.y tile-size)]
-                    (tset node-list (+ (* tile-y grid-w) (+ tile-x 1)) 0))
-                  )
-              )
+                                                           :tree  { : locations : grid-w : grid-h}
+                                                           :tiles {:z-index -10}})
+          wall-sprites (icollect [_ v (ipairs (playdate.graphics.sprite.getAllSprites))]
+                         (if (?. v :wall?) v))
 
-          graph (playdate.pathfinder.graph.new2DGrid grid-w grid-h false node-list)
-          graph-locations (collect [k v (pairs locations)]
-                            ;; (values k (graph:nodeWithXY (+ v.tile-x 1) (+ v.tile-y 1)))
-                            (values k (graph:nodeWithID (+ (* grid-w v.tile-y) (+ v.tile-x 1))))
-                            )
+          graph (-> (graph.new-tile-graph grid-w grid-h { : tile-size : locations})
+                    (: :remove-walls wall-sprites))
+          ;; graph-locations (collect [k v (pairs locations)]
+          ;;                   ;; (values k (graph:nodeWithXY (+ v.tile-x 1) (+ v.tile-y 1)))
+          ;;                   (values k (graph:nodeWithID (+ (* grid-w v.tile-y) (+ v.tile-x 1))))
+          ;;                   )
           player (?. (icollect [_ v (ipairs loaded.entities)]
                        (if (?. v :player?) v)) 1)
           ]
-      (tset $ :state {: player : stage-width : stage-height : graph : graph-locations : grid-w})
+      (tset $ :state {: player : stage-width : stage-height : graph : grid-w})
       )
     )
 
@@ -69,6 +56,10 @@
   (fn draw! [$]
     ;; ($.layer.tilemap:draw 0 0)
     ($ui:render!)
+    )
+
+  (fn debug-draw! [$]
+    ;; ($.state.graph:draw)
     )
   )
 

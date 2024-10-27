@@ -95,6 +95,13 @@
                             (let [cur-time# (love.timer.getTime)]
                               (playdate.love-draw-start)
                               (game#.draw-hook)
+                              (when (?. game# :debug-draw)
+                                (let [shader# (love.graphics.getShader)]
+                                  (shader#:send "debugDraw" true)
+                                  (game#.debug-draw)
+                                  (shader#:send "debugDraw" false)
+                                  )
+                                )
                               (playdate.love-draw-end)
                               (if (< love.next-time cur-time#)
                                   (tset love :next-time cur-time#)
@@ -107,7 +114,10 @@
   (let [code-load (defns :game bindings ...)]
     `(let [game# ,code-load]
        (game#.load-hook)
-       (tset playdate :update (fn [] (game#.update-hook) (game#.draw-hook))))))
+       (tset playdate :update (fn [] (game#.update-hook) (game#.draw-hook)))
+       (if (?. game# :debug-draw)
+           (tset playdate :debugDraw (fn [] (game#.debug-draw))))
+       )))
 
 (fn pd/load [bindings ...]
   (if _G.LOVE

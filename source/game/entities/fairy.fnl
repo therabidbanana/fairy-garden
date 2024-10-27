@@ -7,28 +7,19 @@
    $ui (require :source.lib.ui)
    anim (require :source.lib.animation)]
 
-  (fn plan-next-step [state {:state {: graph : graph-locations : grid-w} &as scene}]
+  (fn plan-next-step [state {:state {: graph } &as scene}]
     (let [goal
-          (?. graph-locations :tree)
-          ;; (case state.state
-          ;;        :order (?. graph-locations :wait)
-          ;;        :leave (?. graph-locations :exit)
-          ;;        _ nil)
-          ;; TODO: XY on nodes seems +1 each way. coords 1 based?
-          curr (if goal (graph:nodeWithID (+ (* grid-w state.tile-y) (+ state.tile-x 1))))
-          ;; curr (if goal (graph:nodeWithXY (+ (inspect state.tile-y) 1) (+ (inspect state.tile-x) 1)))
-          path (if curr (graph:findPath curr goal))
-          ;; _ (inspect {:x curr.x :y curr.y})
-          ;; _ (inspect (curr:connectedNodes))
-          ;; _ (inspect path)
-          next-step (?. path 2)]
+          (graph:location-node :tree)
+          curr (if goal (graph:at-tile state.tile-x state.tile-y))
+          next-step (if curr (graph:next-step curr goal))
+          ]
       (if
        (and (= (?. curr :x) (?. goal :x)) (= (?. curr :y) (?. goal :y))) :at-goal
        (= (type next-step) "nil") :pause
-       (< (- next-step.y 1) state.tile-y) :up
-       (> (- next-step.x 1) state.tile-x) :right
-       (< (- next-step.x 1) state.tile-x) :left
-       (> (- next-step.y 1) state.tile-y) :down
+       (< next-step.y state.tile-y) :up
+       (> next-step.x state.tile-x) :right
+       (< next-step.x state.tile-x) :left
+       (> next-step.y state.tile-y) :down
        :pause)))
 
   (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self} map-state]

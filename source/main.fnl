@@ -29,5 +29,7 @@
  (fn draw-hook []
    (scene-manager:draw!)
    )
+ (fn debug-draw []
+   (scene-manager:debug-draw!))
  )
 

@@ -19,6 +19,12 @@ Plans:
 - [ ] Tower purchase menu
 - [ ] Timeouts for fairies (loops can't keep them forever)
 
+Art:
+- [ ] redirect (each dir)
+- [ ] splitter (multi-state)
+- [ ] sprinkler (multi-state)
+- [ ] happy / sad statues ? 
+
 Bugs:
 
 - [x] collision response overlap in Love

@@ -250,6 +250,13 @@
    (-updateCollisionBox self))
 
  (fn moveWithCollisions [self x y]
+   (let [(new-x new-y collisions count) (self:checkCollisions x y)]
+     ;; (if first-hit (inspect first-hit))
+     (moveTo self new-x new-y)
+     (values new-x new-y collisions count)
+     ))
+
+ (fn checkCollisions [self x y]
    (let [box1 self.collisionBox
          dx (- x self.x)
          dy (- y self.y)
@@ -301,7 +308,6 @@
                    y)
          ]
      ;; (if first-hit (inspect first-hit))
-     (moveTo self new-x new-y)
      (values new-x new-y collisions count)
      )
    )

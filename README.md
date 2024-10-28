@@ -8,13 +8,14 @@ Plans:
 - [x] Implement "camera" moving around playing field selecting
 - [x] Fairy fly to tree
 - [x] Tree despawner
-- [ ] Fairy redirect item
-- [ ] Adding obstruction ?
+- [x] Fairy redirect item
+- [x] Adding obstruction - walls auto remove pathfinding
 - [x] Fairy spawner
 - [ ] Tower purchase menu
 
 Bugs:
 
+- [x] collision response overlap in Love
 - [ ] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
 
 # Playdate Fennel Starter

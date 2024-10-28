@@ -276,17 +276,23 @@
                (let [(normx normy collidedt) (-sweptaabb box1 spr.collisionBox dx dy)]
                  ;; TODO - response slide/bounce & ordering multiple?
                  (if (< collidedt 1)
-                     {:sprite self.collisionBox :other spr.collisionBox
+                     {:sprite self :other spr
+                      :spriteRect self.collisionBox :otherRect spr.collisionBox
                       :ti collidedt
                       :move {:x (+ (* collidedt dx))
                              :y (+ (* collidedt dy))}
                       :normal {:x normx :y normy}
-                      :type ""})
+                      :type (if (?. self :collisionResponse)
+                                (if (= (type self.collisionResponse) :string)
+                                    self.collisionResponse
+                                    (self:collisionResponse spr))
+                                :freeze)})
                  ))
            )
          count (length collisions)
          _ (table.sort collisions (fn [a b] (< a.ti b.ti)))
-         first-hit (?. collisions 1)
+         actual-collides (icollect [i v (ipairs collisions)] (if (not= v.type :overlap) v))
+         first-hit (?. actual-collides 1)
          new-x (if first-hit
                    (+ self.x first-hit.move.x)
                    x)

@@ -11,12 +11,19 @@ Plans:
 - [x] Fairy redirect item
 - [x] Adding obstruction - walls auto remove pathfinding
 - [x] Fairy spawner
+- [x] Fairy splitter
+- [x] Happy / sad entities
+- [x] Water mechanics
+- [ ] Wave handling
+- [ ] Stats
 - [ ] Tower purchase menu
+- [ ] Timeouts for fairies (loops can't keep them forever)
 
 Bugs:
 
 - [x] collision response overlap in Love
 - [ ] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
+- [ ] player can get off grid with repeated button mashing
 
 # Playdate Fennel Starter
 

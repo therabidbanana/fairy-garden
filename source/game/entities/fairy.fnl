@@ -27,16 +27,33 @@
          :pause))))
 
   (fn at-tree! [self]
-    (print "Made it to tree!")
+    (print (.. "Made it to tree! " self.state.happiness) )
     (self:remove))
 
   (fn transition! [self state]
     (tset self :state :state state))
 
+  (fn add-happiness! [{: state &as self} val]
+    (let [new-hap (+ val state.happiness)]
+      (tset state :happiness new-hap)))
+
+  (fn add-sadness! [{: state &as self} val]
+    (let [new-hap (+ val state.happiness)]
+      (tset state :happiness new-hap)))
+
   (fn react-at-tile! [self]
-    (let [curr-overlap (?. (self:overlappingSprites) 1)]
-      (if (?. curr-overlap :state :dir)
-          (self:transition! curr-overlap.state.dir)))
+    (let [curr-overlap (?. (self:overlappingSprites) 1)
+          {: set-state : add-happiness}
+          (if (?. curr-overlap :interacted!)
+              (curr-overlap:interacted! fairy)
+              {})]
+      (if set-state
+          (self:transition! set-state))
+      (if (and add-happiness (> add-happiness 0))
+          (self:add-happiness! add-happiness)
+          (and add-happiness (< add-happiness 0))
+          (self:add-sadness! add-happiness)
+          ))
     )
 
   (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self} map-state]
@@ -104,12 +121,15 @@
       (tset player :react! react!)
       (tset player :collisionResponse collisionResponse)
       (tset player :at-tree! at-tree!)
+      (tset player :add-happiness! add-happiness!)
+      (tset player :add-sadness! add-sadness!)
       (tset player :transition! transition!)
       (tset player :react-at-tile! react-at-tile!)
 
       (tset player :tile-h tile-h)
       (tset player :tile-w tile-w)
       (tset player :state {: animation :speed 2 :dx 0 :dy 0 :visible true
+                           :happiness 3
                            :tile-x (div x tile-w) :tile-y (div y tile-h)
                            :state :tree})
       (tile.add! player {: tile-h : tile-w})

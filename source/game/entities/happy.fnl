@@ -1,26 +1,16 @@
-(import-macros {: inspect : defns : div : clamp} :source.lib.macros)
+(import-macros {: inspect : defns : div} :source.lib.macros)
 
-(defns :redirect
+(defns :happy
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
 
-  (fn react! [{:state { : dir : water} &as self}]
-    (when (<= water 0)
-      (print "Out of water")
-      (self:remove)))
-
-  (fn interacted! [{:state { : dir : water} &as self} fairy]
-    (tset self :state :water (- water 1))
-    {:set-state dir}
+  (fn interacted! [{:state { : dir } &as self} fairy]
+    {:add-happiness 1}
     )
 
-  (fn water! [{:state { : dir : water} &as self} val]
-    (let [val (or val 1)
-          new-water (clamp 0 (+ water val) 8)]
-      (print (.. "Watered! " new-water))
-      (tset self :state :water new-water)))
+  (fn react! [{:state { : dir : tile-h : tile-w} &as self}])
 
   (fn collisionResponse [self other]
     :overlap)
@@ -36,8 +26,7 @@
       (redirect:setGroups [4])
       (redirect:setCollidesWithGroups [3])
       (tset redirect :react! react!)
-      (tset redirect :water! water!)
       (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {: dir :water 8})
+      (tset redirect :state {: dir : tile-h : tile-w})
       redirect)))

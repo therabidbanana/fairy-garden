@@ -6,21 +6,24 @@
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
 
+  (fn interacted! [{:state { : dir : water} &as self} fairy]
+    (case dir
+      :up (tset self :state :dir :down)
+      :down (tset self :state :dir :up)
+      :left (tset self :state :dir :right)
+      :right (tset self :state :dir :left)
+      _ nil)
+    (tset self :state :water (- water 1))
+    {:set-state dir})
+
+  (fn water! [{:state { : dir : water} &as self} val]
+    (let [val (or val 1)]
+      (tset self :state :water (clamp 0 (+ water val) 8))))
+
   (fn react! [{:state { : dir : water} &as self}]
     (when (<= water 0)
       (print "Out of water")
       (self:remove)))
-
-  (fn interacted! [{:state { : dir : water} &as self} fairy]
-    (tset self :state :water (- water 1))
-    {:set-state dir}
-    )
-
-  (fn water! [{:state { : dir : water} &as self} val]
-    (let [val (or val 1)
-          new-water (clamp 0 (+ water val) 8)]
-      (print (.. "Watered! " new-water))
-      (tset self :state :water new-water)))
 
   (fn collisionResponse [self other]
     :overlap)

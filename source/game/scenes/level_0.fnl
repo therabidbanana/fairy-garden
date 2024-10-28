@@ -18,9 +18,10 @@
           locations {}
 
           {: stage-width : stage-height
-           &as loaded} (prepare-level! level_0 entity-map {:floor {:z-index -110}
-                                                           :tree  { : locations : grid-w : grid-h}
-                                                           :tiles {:z-index -10}})
+           &as loaded} (prepare-level! level_0 entity-map {:floor   {:z-index -110}
+                                                           :tree    { : locations : grid-w : grid-h}
+                                                           :spawner { : locations : grid-w : grid-h}
+                                                           :tiles   {:z-index -10}})
           wall-sprites (icollect [_ v (ipairs (playdate.graphics.sprite.getAllSprites))]
                          (if (?. v :wall?) v))
 

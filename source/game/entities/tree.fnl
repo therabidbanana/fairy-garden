@@ -7,8 +7,8 @@
    $ui (require :source.lib.ui)
    ]
 
-  ;; (fn collisionResponse [self other]
-  ;;   (other:collisionResponse))
+  (fn collisionResponse [self other]
+    (other:collisionResponse))
 
   (fn new! [x y {: tile-h : tile-w :layer-details { : grid-w : locations}}]
     (let [tile-x (div x tile-w)

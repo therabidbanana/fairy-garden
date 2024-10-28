@@ -8,11 +8,9 @@
    anim (require :source.lib.animation)]
 
   (fn plan-next-step [state {:state {: graph } &as scene}]
-    (let [goal
-          (graph:location-node :tree)
+    (let [goal (graph:location-node :tree)
           curr (if goal (graph:at-tile state.tile-x state.tile-y))
-          next-step (if curr (graph:next-step curr goal))
-          ]
+          next-step (if curr (graph:next-step curr goal))]
       (if
        (and (= (?. curr :x) (?. goal :x)) (= (?. curr :y) (?. goal :y))) :at-goal
        (= (type next-step) "nil") :pause
@@ -22,6 +20,10 @@
        (> next-step.y state.tile-y) :down
        :pause)))
 
+  (fn at-tree! [self]
+    (print "Made it to tree!")
+    (self:remove))
+
   (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self} map-state]
     (let [(dx dy) (self:tile-movement-react! state.speed)]
       (if (and (= dx 0) (= dy 0))
@@ -30,6 +32,7 @@
             :down (self:->down!)
             :left (self:->left!)
             :right (self:->right!)
+            :at-goal (self:at-tree!)
             ))
       (tset self :state :dx dx)
       (tset self :state :dy dy)
@@ -76,6 +79,8 @@
       ;; (tset player :draw draw)
       (tset player :update update)
       (tset player :react! react!)
+      (tset player :at-tree! at-tree!)
+
       (tset player :tile-h tile-h)
       (tset player :tile-w tile-w)
       (tset player :state {: animation :speed 2 :dx 0 :dy 0 :visible true

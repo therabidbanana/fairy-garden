@@ -6,12 +6,16 @@ but they'd hate to impose.
 Plans:
 
 - [x] Implement "camera" moving around playing field selecting
-- [ ] Fairy fly to tree
+- [x] Fairy fly to tree
+- [x] Tree despawner
 - [ ] Fairy redirect item
 - [ ] Adding obstruction ?
-- [ ] Fairy spawner
+- [x] Fairy spawner
 - [ ] Tower purchase menu
 
+Bugs:
+
+- [ ] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
 
 # Playdate Fennel Starter
 

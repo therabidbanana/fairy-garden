@@ -54,8 +54,8 @@
   ;;   (animation:draw x y)
   ;;   )
 
-  (fn collisionResponse [self other]
-    (other:collisionResponse))
+  ;; (fn collisionResponse [self other]
+  ;;   (other:collisionResponse))
 
   (fn new! [x y {: tile-w : tile-h}]
     (let [image (gfx.imagetable.new :assets/images/player-sprite)
@@ -65,10 +65,11 @@
       (player:setBounds x y 32 32)
       (player:setCollideRect 6 1 18 30)
       (player:setGroups [1])
-      (player:setCollidesWithGroups [])
+      (player:setCollidesWithGroups [ ])
       ;; (tset player :draw draw)
       (tset player :player? true)
       (tset player :update update)
+      ;; (tset player :collisionResponse collisionResponse)
       (tset player :react! react!)
       (tset player :state {: animation :speed 4 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})

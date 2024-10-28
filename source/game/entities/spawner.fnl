@@ -1,6 +1,6 @@
 (import-macros {: inspect : defns : div} :source.lib.macros)
 
-(defns :tree
+(defns :spawner
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)

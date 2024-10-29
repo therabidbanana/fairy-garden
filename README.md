@@ -28,7 +28,7 @@ Art:
 Bugs:
 
 - [x] collision response overlap in Love
-- [ ] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
+- [x] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
 - [ ] player can get off grid with repeated button mashing
 
 # Playdate Fennel Starter

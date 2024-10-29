@@ -15,27 +15,29 @@
 
 (defmodule _G.playdate.graphics.animation.loop
   [timer-lib _G.playdate.timer]
+  (fn -tick-timer! [$]
+    (if (and $.timer.expired (< (+ $.__frame $.startFrame) $.endFrame))
+        (do
+          ($.timer:reset)
+          (tset $ :__frame (+ $.__frame 1)))
+        (and $.timer.expired $.shouldLoop)
+        (do
+          ($.timer:reset)
+          (tset $ :__frame 0))
+        $.timer.expired
+        (do
+          ($.timer:reset)
+          (tset $ :finished true))
+        true
+        (do
+          (tset $ :finished false)
+          ;; (tset $ :frame (math.min $.frame $.startFrame))
+          )
+        ))
   (fn draw [$ x y]
     (let []
       ;; TODO: can we do this state tweaking outside the draw loop? there's no animation.loop updateAll...
-      (if (and $.timer.expired (< (+ $.__frame $.startFrame) $.endFrame))
-          (do
-            ($.timer:reset)
-            (tset $ :__frame (+ $.__frame 1)))
-          (and $.timer.expired $.shouldLoop)
-          (do
-            ($.timer:reset)
-            (tset $ :__frame 0))
-          $.timer.expired
-          (do
-            ($.timer:reset)
-            (tset $ :finished true))
-          true
-          (do
-            (tset $ :finished false)
-            ;; (tset $ :frame (math.min $.frame $.startFrame))
-            )
-          )
+      ($:-tick-timer!)
       ($._image:drawImage (+ $.startFrame $.__frame) x y)))
 
   (fn isValid [self]
@@ -49,6 +51,7 @@
     (self.timer:remove))
 
   (fn image [self]
+    (self:-tick-timer!)
     (self._image:getImage (+ self.startFrame self.__frame)))
 
   (fn new [delay _image shouldLoop]
@@ -60,7 +63,7 @@
           shouldLoop (if (= shouldLoop nil) true shouldLoop)
           timer (timer-lib.new delay)
           item { : startFrame : endFrame : __frame : finished
-                 : shouldLoop : timer : __state
+                 : shouldLoop : timer : __state : -tick-timer!
                  : _image : image : delay : isValid : draw : remove }]
       (tset timer :discardOnCompletion false)
       (setmetatable item {:__index (fn [tbl key]

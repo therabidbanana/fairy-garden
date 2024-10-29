@@ -897,9 +897,9 @@
 							"height": 32,
 							"defUid": 22,
 							"px": [320,416],
-							"fieldInstances": [{ "__identifier": "dir", "__type": "String", "__value": "left", "__tile": null, "defUid": 23, "realEditorValues": [{
+							"fieldInstances": [{ "__identifier": "dir", "__type": "String", "__value": "right", "__tile": null, "defUid": 23, "realEditorValues": [{
 								"id": "V_String",
-								"params": ["left"]
+								"params": ["right"]
 							}] }],
 							"__worldX": 320,
 							"__worldY": 416

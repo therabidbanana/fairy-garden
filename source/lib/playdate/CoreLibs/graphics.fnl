@@ -61,7 +61,6 @@
   (fn setDrawOffset [x y]
     (tset _G.playdate.graphics :_tx x)
     (tset _G.playdate.graphics :_ty y)
-    ;; Doesn't work right, we may have to shift everything ourselves
     (love.graphics.translate x y)
     )
   (fn pushContext [image?]

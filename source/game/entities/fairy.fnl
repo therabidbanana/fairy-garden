@@ -26,10 +26,6 @@
          (> next-step.y state.tile-y) :down
          :pause))))
 
-  (fn at-tree! [self]
-    (print (.. "Made it to tree! " self.state.happiness) )
-    (self:remove))
-
   (fn transition! [self state]
     (tset self :state :state state))
 
@@ -45,9 +41,11 @@
     (let [curr-overlap (?. (self:overlappingSprites) 1)
           {: set-state : add-happiness}
           (if (?. curr-overlap :interacted!)
-              (curr-overlap:interacted! fairy)
+              (curr-overlap:interacted! self)
               {})]
-      (if set-state
+      (if (= set-state :at-tree)
+          (self:remove)
+          set-state
           (self:transition! set-state))
       (if (and add-happiness (> add-happiness 0))
           (self:add-happiness! add-happiness)
@@ -67,7 +65,6 @@
               :down (self:->down!)
               :left (self:->left!)
               :right (self:->right!)
-              :at-goal (self:at-tree!)
               )))
       (tset self :state :dx dx)
       (tset self :state :dy dy)
@@ -120,7 +117,6 @@
       (tset player :update update)
       (tset player :react! react!)
       (tset player :collisionResponse collisionResponse)
-      (tset player :at-tree! at-tree!)
       (tset player :add-happiness! add-happiness!)
       (tset player :add-sadness! add-sadness!)
       (tset player :transition! transition!)

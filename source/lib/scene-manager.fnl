@@ -29,11 +29,14 @@
     )
 
   (fn select! [{: active : scenes &as $} name]
-    (if active ($:exit-scene! active))
-    (tset $ :active (?. scenes name))
-    ($.active:enter! $.game-state))
+    (tset $ :new-scene name))
 
-  (fn tick! [{: active &as $}]
+  (fn tick! [{: active : new-scene : scenes &as $}]
+    (when (not= new-scene nil)
+      (if active ($:exit-scene! active))
+      (tset $ :active (?. scenes new-scene))
+      (tset $ :new-scene nil)
+      ($.active:enter! $.game-state))
     (if (and active (?. active :tick!)) (active:tick! $.game-state))
     (playdate.timer.updateTimers)
     (animation.blinker.updateAll)

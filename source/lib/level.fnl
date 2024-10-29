@@ -16,7 +16,7 @@
         (tilemap:setTileAtPosition x y tile))
       {: tilemap : layer-id : layer-name : tile-h : tile-w : layer-enums : tile-enums}))
 
-  (fn prepare-level [{: layers : w : h}]
+  (fn prepare-level [{: layers : w : h : fields}]
     (let [tile-layers (icollect [_ { : layer-type &as l} (ipairs layers)]
                    (if (= :Tiles layer-type)
                        (prepare-tile-layer l)))
@@ -24,7 +24,7 @@
                         (if (= :Entities layer-type)
                             (prepare-entity-layer l)
                             ))]
-      {: tile-layers : entity-layers : w : h}))
+      {: tile-layers : entity-layers : w : h : fields}))
 
   (fn tile-layer-sprite [layer solid? layer-details]
     (let [bg (gfx.sprite.new)
@@ -74,6 +74,7 @@
         (add-entities! v entity-map layer-details all-entities))
       {
        :stage-width loaded.w :stage-height loaded.h
+       :fields loaded.fields
        :ticks 0
        : layers
        :entities all-entities

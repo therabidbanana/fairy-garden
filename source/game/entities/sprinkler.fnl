@@ -28,7 +28,7 @@
           (x y coll count) (self:checkCollisions x y)]
       (?. coll 1 :other)))
 
-  (fn react! [{:state { : dir : water : timer : max-timer} &as self}]
+  (fn react! [{:state { : image : dir : timer : max-timer} &as self}]
     (let [new-t (- timer 1)
           to-water (self:-get-facing-sprite)]
       (if (<= new-t 0)
@@ -39,6 +39,8 @@
                                      :right :down
                                      :down :left
                                      :left :up))
+            (self:setImage (image:getImage (case self.state.dir :left 1 :up 2 :right 3 :down 4)))
+            (self:markDirty)
             (tset self :state :timer max-timer))
           (tset self :state :timer new-t)
           )))
@@ -50,7 +52,9 @@
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)
           dir (or (?. fields :dir) :right)
+          image (gfx.imagetable.new :assets/images/sprinkler)
           redirect (gfx.sprite.new)]
+      (redirect:setImage (image:getImage (case dir :left 1 :up 2 :right 3 :down 4)))
       (redirect:setCenter 0 0)
       (redirect:setBounds x y 32 32)
       (redirect:setCollideRect 0 0 32 32)
@@ -61,5 +65,5 @@
       ;; Sprinklers - should they interact with fairies?
       ;; (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {:timer 100 :max-timer 100 : dir })
+      (tset redirect :state {:timer 100 :max-timer 100 : dir : image})
       redirect)))

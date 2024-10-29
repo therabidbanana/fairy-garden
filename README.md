@@ -19,16 +19,11 @@ Plans:
 - [ ] Tower purchase menu
 - [ ] Timeouts for fairies (loops can't keep them forever)
 
-Art:
-- [ ] redirect (each dir)
-- [ ] splitter (multi-state)
-- [ ] sprinkler (multi-state)
-- [ ] happy / sad statues ? 
-
 Bugs:
 
 - [x] collision response overlap in Love
 - [x] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
+- [ ] Love menu offset issue - draws and displays top of map
 - [ ] player can get off grid with repeated button mashing
 
 # Playdate Fennel Starter

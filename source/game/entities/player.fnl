@@ -7,7 +7,25 @@
    $ui (require :source.lib.ui)
    tile (require :source.lib.behaviors.tile-movement)
    scene-manager (require :source.lib.scene-manager)
-   anim (require :source.lib.animation)]
+   anim (require :source.lib.animation)
+   splitter   (require :source.game.entities.splitter)
+   sprinkler   (require :source.game.entities.sprinkler)
+   redirect   (require :source.game.entities.redirect)
+   happy   (require :source.game.entities.happy)
+   ]
+
+  (fn puchase-and-place! [self item]
+    (-> (fairy.new! self.x self.y { : tile-w : tile-h }) (: :add))
+    )
+
+  (fn shop! [self]
+    ($ui:open-menu! {:options [
+                               {:text "Up" :action #(print "foo")}
+                               {:text "Down" :action #(print "foo")}
+                               {:text "Left" :action #(print "foo")}
+                               {:text "Right" :action #(print "foo")}
+                               ]})
+    )
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
     (if (justpressed? playdate.kButtonLeft) (self:->left!)
@@ -27,6 +45,7 @@
                                 :up [(+ x (div width 2)) (- y 8)]
                                 _ [(+ x (div width 2)) (+ 8 height y)]) ;; 40 for height / width of sprite + 8
           [facing-sprite & _] (gfx.sprite.querySpritesAtPoint facing-x facing-y)
+          clear-square true
           ]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
@@ -35,8 +54,8 @@
       (if (playdate.buttonJustPressed playdate.kButtonB)
           (scene-manager:select! :menu))
       (if (and (playdate.buttonJustPressed playdate.kButtonA)
-               facing-sprite)
-          ($ui:open-textbox! {:text (gfx.getLocalizedText "textbox.test2")}))
+               clear-square)
+          (self:shop!))
       )
     self)
 
@@ -71,7 +90,8 @@
       (tset player :update update)
       ;; (tset player :collisionResponse collisionResponse)
       (tset player :react! react!)
-      (tset player :state {: animation :speed 4 :dx 0 :dy 0 :visible true})
+      (tset player :shop! shop!)
+      (tset player :state {: animation :speed 6 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})
       player)))
 

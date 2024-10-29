@@ -9,6 +9,7 @@
 
   (local state {})
   (fn enter! [$]
+    (playdate.graphics.setDrawOffset 0 0)
     ($ui:open-menu! {:options [
                                {:text "Level 1" :action #(scene-manager:select! :level_0)}
                                {:text "Level 2" :action #(scene-manager:select! :level_1)}
@@ -18,7 +19,6 @@
   (fn exit! [$]
     (tset $ :state {}))
   (fn tick! [{:state {: listview} &as $}]
-    (playdate.graphics.setDrawOffset 0 0)
     ;; (listview:drawInRect 180 20 200 200)
     (if ($ui:active?) ($ui:tick!)
         (let [pressed? playdate.buttonJustPressed]

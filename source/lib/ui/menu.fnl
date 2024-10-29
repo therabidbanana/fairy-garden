@@ -38,7 +38,10 @@
   (fn render! [{: view : rect : on-draw &as comp} $ui]
     (if on-draw (on-draw comp (?. view.options (view:getSelectedRow))))
     ;; needsDisplay note - sprite update sometimes wipes area
+    (gfx.pushContext)
+    (gfx.setDrawOffset 0 0)
     (view:drawInRect (rect:unpack))
+    (gfx.popContext)
     )
 
   (fn tick! [{: view : anim-w : anim-h &as comp} $ui]

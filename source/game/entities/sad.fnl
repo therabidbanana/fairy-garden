@@ -24,8 +24,10 @@
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)
           dir (or (?. fields :dir) :right)
+          image (gfx.imagetable.new :assets/images/weed)
           redirect (gfx.sprite.new)]
       (redirect:setCenter 0 0)
+      (redirect:setImage (image:getImage 1))
       (redirect:setBounds x y 32 32)
       (redirect:setCollideRect 0 0 32 32)
       (redirect:setGroups [4])

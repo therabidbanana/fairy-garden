@@ -6,13 +6,15 @@
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
 
-  (fn interacted! [{:state { : dir : water} &as self} fairy]
+  (fn interacted! [{:state { : dir : water : image} &as self} fairy]
     (case dir
       :up (tset self :state :dir :down)
       :down (tset self :state :dir :up)
       :left (tset self :state :dir :right)
       :right (tset self :state :dir :left)
       _ nil)
+    (self:setImage (image:getImage (case self.state.dir :left 1 :up 2 :right 3 :down 4)))
+    (self:markDirty)
     (tset self :state :water (- water 1))
     {:set-state dir})
 
@@ -32,7 +34,9 @@
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)
           dir (or (?. fields :dir) :right)
+          image (gfx.imagetable.new :assets/images/splitter)
           redirect (gfx.sprite.new)]
+      (redirect:setImage (image:getImage (case dir :left 1 :up 2 :right 3 :down 4)))
       (redirect:setCenter 0 0)
       (redirect:setBounds x y 32 32)
       (redirect:setCollideRect 0 0 32 32)
@@ -42,5 +46,5 @@
       (tset redirect :water! water!)
       (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {: dir :water 8})
+      (tset redirect :state {: image : dir :water 8})
       redirect)))

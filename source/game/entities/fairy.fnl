@@ -114,6 +114,7 @@
       (player:setGroups [3])
       (player:setCollidesWithGroups [4])
       ;; (tset player :draw draw)
+      (player:setZIndex 10)
       (tset player :update update)
       (tset player :react! react!)
       (tset player :collisionResponse collisionResponse)

@@ -14,9 +14,9 @@ Plans:
 - [x] Fairy splitter
 - [x] Happy / sad entities
 - [x] Water mechanics
-- [ ] Wave handling
-- [ ] Stats
-- [ ] Tower purchase menu
+- [x] Wave handling
+- [ ] Completion
+- [x] Tower purchase menu
 - [ ] Timeouts for fairies (loops can't keep them forever)
 
 Bugs:

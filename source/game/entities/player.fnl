@@ -14,16 +14,30 @@
    happy   (require :source.game.entities.happy)
    ]
 
-  (fn puchase-and-place! [self item]
-    (-> (fairy.new! self.x self.y { : tile-w : tile-h }) (: :add))
+  (fn purchase-and-place! [{ :tile-movement-opts { : tile-w : tile-h } &as self} item]
+    (let [ideal-x (* (div self.x tile-w) tile-w)
+          ideal-y (* (div self.y tile-h) tile-h)]
+      (case item
+        {:type :redirect : dir} (-> (redirect.new! ideal-x ideal-y { :fields {: dir} : tile-w : tile-h }) (: :add))
+        {:type :splitter : dir} (-> (splitter.new! ideal-x ideal-y { :fields {: dir} : tile-w : tile-h }) (: :add))
+        {:type :sprinkler} (-> (sprinkler.new! ideal-x ideal-y {  : tile-w : tile-h }) (: :add))
+        {:type :tulip} (-> (happy.new! ideal-x ideal-y {  : tile-w : tile-h }) (: :add))
+        )
+      )
     )
 
   (fn shop! [self]
-    ($ui:open-menu! {:options [
-                               {:text "Up" :action #(print "foo")}
-                               {:text "Down" :action #(print "foo")}
-                               {:text "Left" :action #(print "foo")}
-                               {:text "Right" :action #(print "foo")}
+    (self:->stop!)
+    ($ui:open-menu! {:can-exit? true
+                     :options [
+                               {:text "Up" :action #(self:purchase-and-place! {:type :redirect :dir :up})}
+                               {:text "Down" :action #(self:purchase-and-place! {:type :redirect :dir :down})}
+                               {:text "Left" :action #(self:purchase-and-place! {:type :redirect :dir :left})}
+                               {:text "Right" :action #(self:purchase-and-place! {:type :redirect :dir :right})}
+                               {:text "Sprinkler" :action #(self:purchase-and-place! {:type :sprinkler})}
+                               {:text "Tulip" :action #(self:purchase-and-place! {:type :tulip})}
+                               {:text "Splitter L/R" :action #(self:purchase-and-place! {:type :splitter :dir :left})}
+                               {:text "Splitter U/D" :action #(self:purchase-and-place! {:type :splitter :dir :up})}
                                ]})
     )
 
@@ -63,9 +77,10 @@
     (let [target-x (+ dx self.x)
           target-y (+ dy self.y)
           (x y collisions count) (self:moveWithCollisions target-x target-y)]
-      x)
-    (self:setImage (animation:getImage))
-    (self:markDirty)
+      (tset self :state :dx 0)
+      (tset self :state :dy 0)
+      (self:setImage (animation:getImage))
+      (self:markDirty))
     )
 
   ;; (fn draw [{:state {: animation : dx : dy : visible : walking?} &as self} x y w h]
@@ -90,6 +105,7 @@
       (tset player :update update)
       ;; (tset player :collisionResponse collisionResponse)
       (tset player :react! react!)
+      (tset player :purchase-and-place! purchase-and-place!)
       (tset player :shop! shop!)
       (tset player :state {: animation :speed 6 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})

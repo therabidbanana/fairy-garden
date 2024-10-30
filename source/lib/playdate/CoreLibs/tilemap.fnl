@@ -7,7 +7,9 @@
     (tset _G.playdate :graphics :tilemap {}))
 
 (defmodule _G.playdate.graphics.tilemap
-  []
+  [
+   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
+   ]
 
   (fn setImageTable [self imagetable]
     (tset self :imagetable imagetable)
@@ -15,7 +17,7 @@
     )
 
   (fn draw [self x y]
-    (love.graphics.draw self.spritebatch x y)
+    (love-wrap.draw self.spritebatch x y)
     )
 
   (fn setSize [self tiles-w tiles-h]

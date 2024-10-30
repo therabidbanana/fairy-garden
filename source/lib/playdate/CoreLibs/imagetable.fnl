@@ -7,13 +7,15 @@
     (tset _G.playdate :graphics :imagetable {}))
 
 (defmodule _G.playdate.graphics.imagetable
-  [{: split} (require :source.lib.helpers)]
+  [{: split} (require :source.lib.helpers)
+   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
+   ]
 
   (fn getImage [{: quads : atlas} n]
     {:draw (fn [self x y]
              ;; (love.graphics.push :all)
              ;; (love.graphics.setColor 1 1 1 1)
-             (love.graphics.draw atlas (?. quads n) x y)
+             (love-wrap.draw atlas (?. quads n) x y)
              ;; (love.graphics.pop)
              )}
     )
@@ -21,7 +23,7 @@
   (fn drawImage [{: quads : atlas} n x y]
     ;; (love.graphics.push :all)
     ;; (love.graphics.setColor 1 1 1 1)
-    (love.graphics.draw atlas (?. quads n) x y)
+    (love-wrap.draw atlas (?. quads n) x y)
     ;; (love.graphics.pop)
     )
 

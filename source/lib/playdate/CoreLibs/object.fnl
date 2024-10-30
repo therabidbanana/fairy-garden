@@ -356,7 +356,7 @@ vec4 effect(vec4 color, Image tex, vec2 tex_coords, vec2 screen_coords)
     (love.graphics.clear COLOR_WHITE.r COLOR_WHITE.g COLOR_WHITE.b 1)
     (love.graphics.setCanvas canvas)
     ;; Early update of offset can get lost (Love requires it in the draw loop)
-    (love.graphics.translate _G.playdate.graphics._tx _G.playdate.graphics._ty)
+    ;; (love.graphics.translate _G.playdate.graphics._tx _G.playdate.graphics._ty)
     ;; TODO - do we always want this?
     (love.graphics.clear COLOR_WHITE.r COLOR_WHITE.g COLOR_WHITE.b 1)
     )

@@ -45,14 +45,15 @@
    (each [i sprite (ipairs sprite-state.sprites)]
      (if (?. sprite :draw)
          (do
-           (love.graphics.push :all)
-           (if sprite.ignores-offset (love.graphics.origin))
-           (love.graphics.push :all)
-           (love.graphics.translate sprite.x sprite.y)
-           (sprite:draw 0 0 sprite.width sprite.height)
+           (playdate.graphics.pushContext)
+           (if sprite.ignores-offset (playdate.graphics.setDrawOffset 0 0))
+           ;; (love.graphics.push :all)
+           ;; (playdate.graphics._offsetDrawing sprite.x sprite.y)
+           ;; (love.graphics.translate sprite.x sprite.y)
+           (sprite:draw sprite.x sprite.y sprite.width sprite.height)
            ;; (love.graphics.translate 0 0)
-           (love.graphics.pop)
-           (love.graphics.pop)
+           ;; (love.graphics.pop)
+           (playdate.graphics.popContext)
            )))
    )
 

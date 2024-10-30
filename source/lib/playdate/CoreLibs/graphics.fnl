@@ -8,6 +8,7 @@
    imagetable (require :source.lib.playdate.CoreLibs.imagetable)
    tilemap (require :source.lib.playdate.CoreLibs.tilemap)
    image (require :source.lib.playdate.CoreLibs.image)
+   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
    ]
   (local default-font (font.new :assets/fonts/Asheville))
   (local current-font default-font)
@@ -59,14 +60,15 @@
   (local graphics-stack [])
 
   (fn setDrawOffset [x y]
-    (tset _G.playdate.graphics :_tx x)
-    (tset _G.playdate.graphics :_ty y)
-    (love.graphics.translate x y)
+    (_G.love-wrap.set-offset! x y)
+    ;; (tset _G.love-wrap :tx x)
+    ;; (tset _G.love-wrap :ty y)
+    ;; (love.graphics.translate x y)
     )
   (fn pushContext [image?]
     (let [curr-context {:mode  _mode
-                        :tx    _tx
-                        :ty    _ty}]
+                        :tx    _G.love-wrap.state.tx
+                        :ty    _G.love-wrap.state.ty}]
       ;; TODO - handle set canvas
       (table.insert graphics-stack curr-context)
       (love.graphics.push :all)
@@ -91,8 +93,8 @@
   (fn drawTextInRect [text & rest]
     (let [curr-font (love.graphics.getFont)]
       (case rest
-        [{: x : y : w &as rect}] (love.graphics.printf text x y w)
-        [x y w h] (love.graphics.printf text x y w)
+        [{: x : y : w &as rect}] (love-wrap.printf text x y w)
+        [x y w h] (love-wrap.printf text x y w)
         )
       ;; (love.graphics.printf text x y w)
       )
@@ -101,8 +103,8 @@
   (fn drawText [text & rest]
     (let [curr-font (love.graphics.getFont)]
       (case rest
-        [{: x : y &as rect}] (love.graphics.printf text x y w)
-        [x y] (love.graphics.printf text x y 400)
+        [{: x : y &as rect}] (love-wrap.printf text x y w)
+        [x y] (love-wrap.printf text x y 400)
         )
       ;; (love.graphics.printf text x y w)
       )
@@ -126,9 +128,9 @@
                               _G.playdate.graphics._fg.b)
       (case rest
         [x y width height radius]
-        (love.graphics.rectangle "fill" x y width height radius radius)
+        (love-wrap.rectangle "fill" x y width height radius radius)
         [{: x : y : width : height : h : w} radius]
-        (love.graphics.rectangle "fill" x y (or width w) (or height h) radius radius)
+        (love-wrap.rectangle "fill" x y (or width w) (or height h) radius radius)
         )
       (love.graphics.pop)
       )
@@ -144,9 +146,9 @@
                             _G.playdate.graphics._fg.b)
     (case rest
       [x y width height radius]
-      (love.graphics.rectangle "line" x y width height radius radius)
+      (love-wrap.rectangle "line" x y width height radius radius)
       [{: x : y : width : height : w : h} radius]
-      (love.graphics.rectangle "line" x y (or width w) (or height h) radius radius)
+      (love-wrap.rectangle "line" x y (or width w) (or height h) radius radius)
       )
     (love.graphics.pop))
 

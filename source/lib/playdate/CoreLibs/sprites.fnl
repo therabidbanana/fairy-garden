@@ -23,6 +23,7 @@
                            )
                          found)})
   ;; (require :bit)
+   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
   ]
 
  (local sprite-state {:sprites []})
@@ -44,15 +45,20 @@
      (sprite:update))
    (each [i sprite (ipairs sprite-state.sprites)]
      (if (?. sprite :draw)
-         (do
+         (let [canvas (love.graphics.newCanvas sprite.width sprite.height)]
            (playdate.graphics.pushContext)
-           (if sprite.ignores-offset (playdate.graphics.setDrawOffset 0 0))
+           (playdate.graphics.pushContext)
+           (playdate.graphics.setDrawOffset 0 0)
+           (love.graphics.setCanvas canvas)
            ;; (love.graphics.push :all)
            ;; (playdate.graphics._offsetDrawing sprite.x sprite.y)
            ;; (love.graphics.translate sprite.x sprite.y)
-           (sprite:draw sprite.x sprite.y sprite.width sprite.height)
+           (sprite:draw 0 0 sprite.width sprite.height)
            ;; (love.graphics.translate 0 0)
            ;; (love.graphics.pop)
+           (playdate.graphics.popContext)
+           (if sprite.ignores-offset (playdate.graphics.setDrawOffset 0 0))
+           (love-wrap.draw canvas sprite.x sprite.y)
            (playdate.graphics.popContext)
            )))
    )
@@ -97,10 +103,14 @@
    (_G.playdate.geometry.rect.new self.x self.y self.width self.height))
 
  (fn setCenter [self x y] "TODO")
- (fn setSize [self w h] "TODO")
+ (fn setSize [self w h] (tset self :width w) (tset self :height h))
  (fn setIgnoresDrawOffset [self ignores-offset]
    (tset self :ignores-offset ignores-offset))
- (fn setImage [self image] (tset self :image image))
+ (fn setImage [self image]
+   (let [(w h) (image:getSize)]
+     (tset self :width w)
+     (tset self :height h)
+     (tset self :image image)))
  (fn instance-update [self] self)
 
  (fn draw [self x y]
@@ -116,7 +126,10 @@
    )
 
  (fn setTilemap [self tilemap]
-   (tset self :image tilemap)
+   (let [(w h) (tilemap:getPixelSize)]
+     (tset self :width w)
+     (tset self :height h)
+     (tset self :image tilemap))
    )
 
  (fn addEmptyCollisionSprite [& rest]
@@ -331,8 +344,8 @@
    (let [x -800
          y -800
          z-index 0
-         width 0
-         height 0
+         width 1
+         height 1
          ignores-offset false
          sprite { : x : y : width : height : z-index : groups
                   : ignores-offset

@@ -12,6 +12,9 @@
   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
   ]
 
+ (fn getSize [self]
+   (self.image:getDimensions))
+
  (fn draw [self x y]
    (love-wrap.draw self.image x y)
    )
@@ -34,5 +37,5 @@
          image (if height
                    (love.graphics.newCanvas path-or-data height)
                    (love.graphics.newImage path-or-data))]
-     {: image : draw : drawFaded})
+     {: image : draw : drawFaded : getSize})
    ))

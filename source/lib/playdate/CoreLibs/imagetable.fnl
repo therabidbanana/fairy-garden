@@ -17,7 +17,10 @@
              ;; (love.graphics.setColor 1 1 1 1)
              (love-wrap.draw atlas (?. quads n) x y)
              ;; (love.graphics.pop)
-             )}
+             )
+     :getSize (fn [self]
+                (let [q (?. quads n)] (q:getTextureDimensions))
+                )}
     )
 
   (fn drawImage [{: quads : atlas} n x y]

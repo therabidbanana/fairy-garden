@@ -11,7 +11,7 @@
 	"iid": "7e489f20-6280-11ee-94e3-4b3019ff8156",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 38,
+	"nextUid": 39,
 	"identifierStyle": "Lowercase",
 	"toc": [],
 	"worldLayout": "Free",
@@ -772,6 +772,43 @@
 			"allowedRefsEntityUid": null,
 			"allowedRefTags": [],
 			"tilesetUid": null
+		},
+		{
+			"identifier": "wave_countdowns",
+			"doc": null,
+			"__type": "Array<Int>",
+			"uid": 38,
+			"type": "F_Int",
+			"isArray": true,
+			"canBeNull": false,
+			"arrayMinLength": null,
+			"arrayMaxLength": null,
+			"editorDisplayMode": "Hidden",
+			"editorDisplayScale": 1,
+			"editorDisplayPos": "Above",
+			"editorLinkStyle": "StraightArrow",
+			"editorDisplayColor": null,
+			"editorAlwaysShow": false,
+			"editorShowInWorld": true,
+			"editorCutLongValues": true,
+			"editorTextSuffix": null,
+			"editorTextPrefix": null,
+			"useForSmartColor": false,
+			"exportToToc": false,
+			"searchable": false,
+			"min": null,
+			"max": null,
+			"regex": null,
+			"acceptFileTypes": null,
+			"defaultOverride": { "id": "V_Int", "params": [900] },
+			"textLanguageMode": null,
+			"symmetricalRef": false,
+			"autoChainRef": true,
+			"allowOutOfLevelRef": true,
+			"allowedRefs": "OnlySame",
+			"allowedRefsEntityUid": null,
+			"allowedRefTags": [],
+			"tilesetUid": null
 		}
 	] },
 	"levels": [
@@ -796,7 +833,8 @@
 			"externalRelPath": null,
 			"fieldInstances": [
 				{ "__identifier": "wave_counts", "__type": "Array<Int>", "__value": [8], "__tile": null, "defUid": 36, "realEditorValues": [{ "id": "V_Int", "params": [8] }] },
-				{ "__identifier": "wave_delays", "__type": "Array<Int>", "__value": [60], "__tile": null, "defUid": 37, "realEditorValues": [{ "id": "V_Int", "params": [60] }] }
+				{ "__identifier": "wave_delays", "__type": "Array<Int>", "__value": [60], "__tile": null, "defUid": 37, "realEditorValues": [{ "id": "V_Int", "params": [60] }] },
+				{ "__identifier": "wave_countdowns", "__type": "Array<Int>", "__value": [900], "__tile": null, "defUid": 38, "realEditorValues": [{ "id": "V_Int", "params": [900] }] }
 			],
 			"layerInstances": [
 				{
@@ -1467,7 +1505,8 @@
 			"externalRelPath": null,
 			"fieldInstances": [
 				{ "__identifier": "wave_counts", "__type": "Array<Int>", "__value": [12,8], "__tile": null, "defUid": 36, "realEditorValues": [ { "id": "V_Int", "params": [12] }, { "id": "V_Int", "params": [8] } ] },
-				{ "__identifier": "wave_delays", "__type": "Array<Int>", "__value": [200,100], "__tile": null, "defUid": 37, "realEditorValues": [ { "id": "V_Int", "params": [200] }, { "id": "V_Int", "params": [100] } ] }
+				{ "__identifier": "wave_delays", "__type": "Array<Int>", "__value": [20,100], "__tile": null, "defUid": 37, "realEditorValues": [ { "id": "V_Int", "params": [20] }, { "id": "V_Int", "params": [100] } ] },
+				{ "__identifier": "wave_countdowns", "__type": "Array<Int>", "__value": [600,900], "__tile": null, "defUid": 38, "realEditorValues": [ { "id": "V_Int", "params": [600] }, { "id": "V_Int", "params": [900] } ] }
 			],
 			"layerInstances": [
 				{

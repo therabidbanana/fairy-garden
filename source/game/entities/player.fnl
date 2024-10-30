@@ -53,20 +53,18 @@
           dy (if (and (>= (+ y height) $scene.state.stage-height) (> dy 0)) 0
                  (and (<= y 0) (< dy 0)) 0
                  dy)
-          [facing-x facing-y] (case state.facing
-                                :left [(- x 8) (+ y (div height 2))]
-                                :right [(+ 40 x) (+ y (div height 2))]
-                                :up [(+ x (div width 2)) (- y 8)]
-                                _ [(+ x (div width 2)) (+ 8 height y)]) ;; 40 for height / width of sprite + 8
-          [facing-sprite & _] (gfx.sprite.querySpritesAtPoint facing-x facing-y)
-          clear-square true
+          sprites-at (gfx.sprite.querySpritesAtPoint (+ x 1) (+ y 1))
+          clear-square (= nil
+                          (?. (icollect [i v (ipairs sprites-at)]
+                                (if (?. v :player?) nil v))
+                              1))
           ]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
 
-      (if (playdate.buttonJustPressed playdate.kButtonB)
-          (scene-manager:select! :menu))
+      ;; (if (playdate.buttonJustPressed playdate.kButtonB)
+      ;;     (scene-manager:select! :menu))
       (if (and (playdate.buttonJustPressed playdate.kButtonA)
                clear-square)
           (self:shop!))
@@ -97,9 +95,9 @@
           player (gfx.sprite.new)]
       (player:setCenter 0 0)
       (player:setBounds x y 32 32)
-      (player:setCollideRect 6 1 18 30)
+      (player:setCollideRect 0 0 32 32)
       (player:setGroups [1])
-      (player:setCollidesWithGroups [ ])
+      (player:setCollidesWithGroups [])
       ;; (tset player :draw draw)
       (tset player :player? true)
       (tset player :update update)

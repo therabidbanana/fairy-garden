@@ -15,9 +15,16 @@
         (do
           (print "Fairy left")
           (tset self :state :rejected-fairies (+ rejected-fairies 1))))
+
+    (inspect self.state)
     {:set-state :at-tree}
     )
 
+  (fn react! [{:state { : dir : total-fairies : rejected-fairies : accepted-fairies} &as self} $scene]
+    (if (>= (+ rejected-fairies accepted-fairies) total-fairies)
+        ($ui:open-textbox! {:text (.. "All fairies accounted for. " accepted-fairies " of " total-fairies " are staying.")
+                            :action #(scene-manager:select! :menu)} ))
+    )
   (fn collisionResponse [self other]
     :overlap)
 

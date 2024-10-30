@@ -8,26 +8,33 @@
 
    fairy   (require :source.game.entities.fairy)]
 
-  (fn react! [{:state { : timer : max-timer : tile-h : tile-w : waves} &as self}]
-    (let [curr-wave (?. waves 1)
-          curr-wave-count (?. curr-wave :count)
-          new-count (- (or curr-wave-count 1) 1)
+  (fn react! [{:state { : timer : max-timer : tile-h : tile-w : waves : curr-wave} &as self}]
+    (let [wave (?. waves curr-wave)
+          curr-wave-count (?. wave :released)
+          new-count (+ (or curr-wave-count 0) 1)
+          new-countup (+ (or (?. wave :countup) 0) 1)
           new-t (- timer 1)]
-      (if (= curr-wave nil)
+      (if (= wave nil)
           nil
-          (and (>= curr-wave-count 1) (<= new-t 0))
+          (< new-countup wave.countdown)
+          (tset wave :countup new-countup)
+          (and (<= new-count wave.count) (<= new-t 0))
           (do
             (-> (fairy.new! self.x self.y { : tile-w : tile-h }) (: :add))
-            (tset self.state :timer curr-wave.delay)
-            (tset self.state :waves 1 :count new-count)
-            (when (= new-count 0)
-              (tset self.state :waves (table.remove waves 1)))
+            (tset self.state :timer wave.delay)
+            (tset wave :released new-count)
+            (when (>= new-count wave.count)
+              (tset self.state :curr-wave (+ curr-wave 1))
+              )
             )
           (tset self.state :timer new-t))))
 
-  (fn parse-wave [{: wave_counts : wave_delays}]
+  (fn parse-wave [{: wave_countdowns : wave_counts : wave_delays}]
     (let [waves (icollect [i v (ipairs wave_counts)]
-                  {:count v :delay (?. wave_delays i)})]
+                  {:released 0 :count v
+                   :delay (?. wave_delays i)
+                   :countup 0
+                   :countdown (or (?. wave_countdowns i) 300)})]
       waves))
 
   (fn new! [x y {: tile-h : tile-w :layer-details { : grid-w : locations : wave-details}}]
@@ -42,5 +49,6 @@
       (tset locations :spawner {: tile-x : tile-y})
       (tset spawner :state {:timer 100 :max-timer 100
                             :waves (parse-wave wave-details)
+                            :curr-wave 1
                             : tile-h : tile-w})
       spawner)))

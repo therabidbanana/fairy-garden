@@ -46,10 +46,14 @@
      (if (?. sprite :draw)
          (do
            (love.graphics.push :all)
+           (if sprite.ignores-offset (love.graphics.origin))
+           (love.graphics.push :all)
            (love.graphics.translate sprite.x sprite.y)
            (sprite:draw 0 0 sprite.width sprite.height)
            ;; (love.graphics.translate 0 0)
-           (love.graphics.pop))))
+           (love.graphics.pop)
+           (love.graphics.pop)
+           )))
    )
 
  (fn remove [self]
@@ -93,6 +97,8 @@
 
  (fn setCenter [self x y] "TODO")
  (fn setSize [self w h] "TODO")
+ (fn setIgnoresDrawOffset [self ignores-offset]
+   (tset self :ignores-offset ignores-offset))
  (fn setImage [self image] (tset self :image image))
  (fn instance-update [self] self)
 
@@ -326,7 +332,9 @@
          z-index 0
          width 0
          height 0
+         ignores-offset false
          sprite { : x : y : width : height : z-index : groups
+                  : ignores-offset
                   :update instance-update}]
      (setmetatable sprite {:__index _G.playdate.graphics.sprite})
      sprite)

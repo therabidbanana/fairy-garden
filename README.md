@@ -15,7 +15,7 @@ Plans:
 - [x] Happy / sad entities
 - [x] Water mechanics
 - [x] Wave handling
-- [ ] Completion
+- [x] Completion
 - [x] Tower purchase menu
 - [ ] Timeouts for fairies (loops can't keep them forever)
 

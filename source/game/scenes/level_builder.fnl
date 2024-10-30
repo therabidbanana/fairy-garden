@@ -23,27 +23,31 @@
 
   (fn build! [level]
     (let [tile-size 32
-         grid-w (div level.w tile-size)
-         grid-h (div level.h tile-size)
-         locations {}
+          grid-w (div level.w tile-size)
+          grid-h (div level.h tile-size)
+          locations {}
 
-         {: stage-width : stage-height
-          &as loaded} (prepare-level! level
-                                      entity-map
-                                      {:floor   {:z-index -110}
-                                       :tree    { : locations : grid-w : grid-h :wave-details level.fields}
-                                       :spawner { : locations : grid-w : grid-h :wave-details level.fields}
-                                       :tiles   {:z-index -10}})
-         wall-sprites (icollect [_ v (ipairs (playdate.graphics.sprite.getAllSprites))]
-                        (if (?. v :wall?) v))
+          {: stage-width : stage-height
+           &as loaded} (prepare-level! level
+                                       entity-map
+                                       {:floor   {:z-index -110}
+                                        :tree    { : locations : grid-w : grid-h :wave-details level.fields}
+                                        :spawner { : locations : grid-w : grid-h :wave-details level.fields}
+                                        :tiles   {:z-index -10}})
+          wall-sprites (icollect [_ v (ipairs (playdate.graphics.sprite.getAllSprites))]
+                         (if (?. v :wall?) v))
 
-         graph (-> (libgraph.new-tile-graph grid-w grid-h { : tile-size : locations})
-                   (: :remove-walls wall-sprites))
-         player (?. (icollect [_ v (ipairs loaded.entities)]
-                      (if (?. v :player?) v)) 1)
-         tree (?. (icollect [_ v (ipairs loaded.entities)]
-                    (if (?. v :tree?) v)) 1)
-         spawner (?. (icollect [_ v (ipairs loaded.entities)]
-                       (if (?. v :spawner?) v)) 1)]
+          graph (-> (libgraph.new-tile-graph grid-w grid-h { : tile-size : locations})
+                    (: :remove-walls wall-sprites))
+          player (?. (icollect [_ v (ipairs loaded.entities)]
+                       (if (?. v :player?) v)) 1)
+          tree (?. (icollect [_ v (ipairs loaded.entities)]
+                     (if (?. v :tree?) v)) 1)
+          spawner (?. (icollect [_ v (ipairs loaded.entities)]
+                        (if (?. v :spawner?) v)) 1)
+          tree-hud (-> (entity-map.tree-hud.new! tree) (: :add))
+          hud (-> (entity-map.hud.new! player) (: :add))
+          ]
+
       {: player : tree : spawner : stage-width : stage-height : graph : grid-w}
      )))

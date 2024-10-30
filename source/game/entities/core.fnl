@@ -7,6 +7,11 @@
       happy  (require :source.game.entities.happy)
       sad  (require :source.game.entities.sad)
       sprinkler  (require :source.game.entities.sprinkler)
+
+      tree-hud (require :source.game.entities.tree_hud)
+      hud (require :source.game.entities.hud)
       ]
   {: player  : fairy : tree : spawner : redirect : splitter : happy : sad
-   : sprinkler})
+   : sprinkler
+
+   : tree-hud : hud})

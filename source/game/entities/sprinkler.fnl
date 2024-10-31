@@ -4,7 +4,9 @@
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
-   $ui           (require :source.lib.ui)]
+   $ui           (require :source.lib.ui)
+   $particles           (require :source.game.particles)
+   ]
 
   (fn interacted! [{:state { : dir : water} &as self} fairy]
     (case dir
@@ -16,24 +18,31 @@
     (tset self :state :water (- water 1))
     {:set-state dir})
 
-  (fn -get-facing-sprite [{:state { : dir : water : timer} &as self}]
+  (fn -get-facing-x-y [{:state { : dir : water : timer} &as self}]
     (let [x (case dir
-              :left (- self.x 1)
-              :right (+ self.x 1)
+              :left (- self.x self.width)
+              :right (+ self.x self.width)
               _ self.x)
           y (case dir
-              :up (- self.y 1)
-              :down (+ self.y 1)
+              :up (- self.y self.height)
+              :down (+ self.y self.height)
               _ self.y)
+          ]
+      (values x y)))
+
+  (fn -get-facing-sprite [{:state { : dir : water : timer} &as self}]
+    (let [(x y) (-get-facing-x-y self)
           (x y coll count) (self:checkCollisions x y)]
       (?. coll 1 :other)))
 
   (fn react! [{:state { : image : dir : timer : max-timer} &as self}]
     (let [new-t (- timer 1)
+          (splash-x splash-y) (self:-get-facing-x-y)
           to-water (self:-get-facing-sprite)]
       (if (<= new-t 0)
           (do
-            (if (?. to-water :water!) (to-water:water!))
+            (when (?. to-water :water!) (to-water:water!))
+            ($particles.splash! splash-x splash-y)
             (tset self :state :dir (case dir
                                      :up :right
                                      :right :down
@@ -62,6 +71,7 @@
       (redirect:setCollidesWithGroups [3 4])
       (tset redirect :react! react!)
       (tset redirect :-get-facing-sprite -get-facing-sprite)
+      (tset redirect :-get-facing-x-y -get-facing-x-y)
       ;; Sprinklers - should they interact with fairies?
       ;; (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)

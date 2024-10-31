@@ -4,7 +4,7 @@
 (deflevel :level_1
   [;; ldtk (require :source.lib.ldtk.loader)
    $ui (require :source.lib.ui)
-   {: build! : stage-tick!} (require :source.game.scenes.level_builder)
+   {: build! : stage-draw! : stage-tick!} (require :source.game.scenes.level_builder)
    pd playdate
    gfx pd.graphics]
 
@@ -20,9 +20,7 @@
   (fn tick! [{: state &as $scene}]
     (stage-tick! $scene))
 
-  (fn draw! [$]
-    ($ui:render!)
-    )
+  (fn draw! [$scene] (stage-draw! $scene))
 
   (fn debug-draw! [$]
     ;; ($.state.graph:draw)

@@ -7,6 +7,7 @@
    {: prepare-level!} (require :source.lib.level)
    libgraph (require :source.lib.graph)
    $ui (require :source.lib.ui)
+   $particles (require :source.game.particles)
    ]
 
   (fn stage-tick! [{: state &as $scene}]
@@ -20,6 +21,11 @@
           (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
           )
         ))
+
+  (fn stage-draw! [$scene]
+    ($particles:draw-all)
+    ($ui:render!)
+    )
 
   (fn build! [level]
     (let [tile-size 32

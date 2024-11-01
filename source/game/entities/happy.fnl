@@ -6,6 +6,7 @@
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
 
+  (local cost 8)
   (fn interacted! [{:state { : dir } &as self} fairy]
     {:add-happiness 1}
     )

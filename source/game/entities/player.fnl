@@ -12,17 +12,25 @@
    sprinkler   (require :source.game.entities.sprinkler)
    redirect   (require :source.game.entities.redirect)
    happy   (require :source.game.entities.happy)
+   $particles           (require :source.game.particles)
    ]
 
   (fn purchase-and-place! [{ :tile-movement-opts { : tile-w : tile-h } &as self} item]
     (let [ideal-x (* (div self.x tile-w) tile-w)
-          ideal-y (* (div self.y tile-h) tile-h)]
-      (case item
-        {:type :redirect : dir} (-> (redirect.new! ideal-x ideal-y { :fields {: dir} : tile-w : tile-h }) (: :add))
-        {:type :splitter : dir} (-> (splitter.new! ideal-x ideal-y { :fields {: dir} : tile-w : tile-h }) (: :add))
-        {:type :sprinkler} (-> (sprinkler.new! ideal-x ideal-y {  : tile-w : tile-h }) (: :add))
-        {:type :tulip} (-> (happy.new! ideal-x ideal-y {  : tile-w : tile-h }) (: :add))
-        )
+          ideal-y (* (div self.y tile-h) tile-h)
+          class (case item
+                 {:type :redirect : dir} redirect
+                 {:type :splitter : dir} splitter
+                 {:type :sprinkler} sprinkler
+                 {:type :tulip} happy
+                 )
+          cost class.cost
+          new-cash (- self.state.cash cost)]
+      (when (>= new-cash 0)
+        (->
+         (class.new! ideal-x ideal-y { :fields item : tile-w : tile-h })
+         (: :add))
+        (tset self.state :cash new-cash))
       )
     )
 
@@ -30,14 +38,22 @@
     (self:->stop!)
     ($ui:open-menu! {:can-exit? true
                      :options [
-                               {:text "Up" :action #(self:purchase-and-place! {:type :redirect :dir :up})}
-                               {:text "Down" :action #(self:purchase-and-place! {:type :redirect :dir :down})}
-                               {:text "Left" :action #(self:purchase-and-place! {:type :redirect :dir :left})}
-                               {:text "Right" :action #(self:purchase-and-place! {:type :redirect :dir :right})}
-                               {:text "Sprinkler" :action #(self:purchase-and-place! {:type :sprinkler})}
-                               {:text "Tulip" :action #(self:purchase-and-place! {:type :tulip})}
-                               {:text "Splitter L/R" :action #(self:purchase-and-place! {:type :splitter :dir :left})}
-                               {:text "Splitter U/D" :action #(self:purchase-and-place! {:type :splitter :dir :up})}
+                               {:text (.. "(" redirect.cost ") " "Up")
+                                :action #(self:purchase-and-place! {:type :redirect :dir :up})}
+                               {:text (.. "(" redirect.cost ") " "Down")
+                                :action #(self:purchase-and-place! {:type :redirect :dir :down})}
+                               {:text (.. "(" redirect.cost ") " "Left")
+                                :action #(self:purchase-and-place! {:type :redirect :dir :left})}
+                               {:text (.. "(" redirect.cost ") " "Right")
+                                :action #(self:purchase-and-place! {:type :redirect :dir :right})}
+                               {:text (.. "(" sprinkler.cost ") " "Sprinkler")
+                                :action #(self:purchase-and-place! {:type :sprinkler})}
+                               {:text (.. "(" happy.cost ") " "Tulip")
+                                :action #(self:purchase-and-place! {:type :tulip})}
+                               {:text (.. "(" splitter.cost ") " "Splitter L/R")
+                                :action #(self:purchase-and-place! {:type :splitter :dir :left})}
+                               {:text (.. "(" splitter.cost ") " "Splitter U/D")
+                                :action #(self:purchase-and-place! {:type :splitter :dir :up})}
                                ]})
     )
 
@@ -54,10 +70,10 @@
                  (and (<= y 0) (< dy 0)) 0
                  dy)
           sprites-at (gfx.sprite.querySpritesAtPoint (+ x 1) (+ y 1))
-          clear-square (= nil
-                          (?. (icollect [i v (ipairs sprites-at)]
-                                (if (?. v :player?) nil v))
-                              1))
+          overlapping (?. (icollect [i v (ipairs sprites-at)]
+                            (if (?. v :player?) nil v))
+                          1)
+          clear-square (= nil overlapping)
           ]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
@@ -65,7 +81,15 @@
 
       ;; (if (playdate.buttonJustPressed playdate.kButtonB)
       ;;     (scene-manager:select! :menu))
+      (if (and (playdate.buttonJustPressed playdate.kButtonB)
+               (?. overlapping :water!))
+          (do
+            ($particles.splash! self.x self.y)
+            (overlapping:water! 1)))
       (if (and (playdate.buttonJustPressed playdate.kButtonA)
+               (?. overlapping :player-interact!))
+          (overlapping:player-interact! true)
+          (and (playdate.buttonJustPressed playdate.kButtonA)
                clear-square)
           (self:shop!))
       )
@@ -89,10 +113,12 @@
   ;; (fn collisionResponse [self other]
   ;;   (other:collisionResponse))
 
-  (fn new! [x y {: tile-w : tile-h}]
+  (fn new! [x y {: tile-w : tile-h : fields}]
     (let [image (gfx.imagetable.new :assets/images/player-sprite)
           animation (anim.new {: image :states [{:state :walking :start 1 :end 4}]})
-          player (gfx.sprite.new)]
+          player (gfx.sprite.new)
+          cash  (or (?. fields cash) 10)
+          ]
       (player:setCenter 0 0)
       (player:setBounds x y 32 32)
       (player:setCollideRect 0 0 32 32)
@@ -105,7 +131,7 @@
       (tset player :react! react!)
       (tset player :purchase-and-place! purchase-and-place!)
       (tset player :shop! shop!)
-      (tset player :state {: animation :speed 6 :dx 0 :dy 0 :visible true})
+      (tset player :state {: cash : animation :speed 6 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})
       player)))
 

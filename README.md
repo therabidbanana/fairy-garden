@@ -19,12 +19,27 @@ Plans:
 - [x] Tower purchase menu
 - [ ] Timeouts for fairies (loops can't keep them forever)
 
+
 Bugs:
 
 - [x] collision response overlap in Love
 - [x] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
-- [ ] Love menu offset issue - draws and displays top of map
+- [x] Love menu offset issue - draws and displays top of map
 - [x] player can get off grid with repeated button mashing
+
+Polish:
+
+- [ ] Level map
+- [ ] Player hand
+- [ ] Confirm placement
+- [ ] Disable / hide purchase
+- [ ] Better visualize cost, describe item
+
+
+Ideas:
+
+- [ ] Way to earn money
+- [ ] Crank to pull weeds?
 
 # Playdate Fennel Starter
 

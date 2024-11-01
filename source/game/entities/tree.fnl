@@ -34,6 +34,15 @@
       (set found (+ found v)))
     found)
 
+  (fn stars [{:state { : dir : total-fairies : accepted-fairies} &as self}]
+    (if (= total-fairies accepted-fairies)
+        3
+        (>= accepted-fairies (* total-fairies 0.75))
+        2
+        (>= accepted-fairies (* total-fairies 0.5))
+        1
+        0))
+
   (fn new! [x y {: tile-h : tile-w :layer-details { : grid-w : locations : wave-details}}]
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)
@@ -46,6 +55,7 @@
       (tset tree :react! react!)
       (tset tree :collisionResponse collisionResponse)
       (tset tree :interacted! interacted!)
+      (tset tree :stars stars)
       (tset tree :state {:accepted-fairies 0
                          :rejected-fairies 0
                          :total-fairies (parse-wave wave-details)})

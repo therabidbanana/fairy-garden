@@ -7,6 +7,7 @@
    $ui           (require :source.lib.ui)
    $particles           (require :source.game.particles)
    ]
+  (local cost 2)
 
   (fn interacted! [{:state { : dir : water} &as self} fairy]
     (case dir
@@ -15,8 +16,7 @@
       :left (tset self :state :dir :right)
       :right (tset self :state :dir :left)
       _ nil)
-    (tset self :state :water (- water 1))
-    {:set-state dir})
+    {:add-happiness -1 :set-state dir})
 
   (fn -get-facing-x-y [{:state { : dir : water : timer} &as self}]
     (let [x (case dir
@@ -73,7 +73,7 @@
       (tset redirect :-get-facing-sprite -get-facing-sprite)
       (tset redirect :-get-facing-x-y -get-facing-x-y)
       ;; Sprinklers - should they interact with fairies?
-      ;; (tset redirect :interacted! interacted!)
+      (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {:timer 100 :max-timer 100 : dir : image})
+      (tset redirect :state {:timer 60 :max-timer 60 : dir : image})
       redirect)))

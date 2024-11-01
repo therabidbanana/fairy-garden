@@ -1,7 +1,7 @@
 (import-macros {: pd/import : defns : inspect : clamp : div} :source.lib.macros)
 (import-macros {: deflevel} :source.lib.ldtk.macros)
 
-(deflevel :level_0
+(deflevel :level_3
   [;; ldtk (require :source.lib.ldtk.loader)
    $ui (require :source.lib.ui)
    {: build! : stage-draw! : stage-tick!} (require :source.game.scenes.level_builder)
@@ -9,21 +9,20 @@
    gfx pd.graphics]
 
   (fn enter! [$]
-    (let [state (build! level_0)]
+    (let [state (build! level_3)]
       (tset $ :state state)))
 
-  (fn exit! [$]
+  (fn exit! [$ game-state]
+    (tset game-state :level_3 {:stars (or ($.state.tree:stars) 0)})
     (tset $ :state {})
     (playdate.graphics.setDrawOffset 0 0)
     )
+
 
   (fn tick! [{: state &as $scene}]
     (stage-tick! $scene))
 
   (fn draw! [$scene] (stage-draw! $scene))
-
-  (fn tick! [{: state &as $scene}]
-    (stage-tick! $scene))
 
   (fn debug-draw! [$]
     ;; ($.state.graph:draw)

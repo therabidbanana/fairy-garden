@@ -5,6 +5,7 @@
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
+  (local cost 1)
 
   (fn interacted! [{:state { : dir : water : image} &as self} fairy]
     (case dir
@@ -21,6 +22,16 @@
   (fn water! [{:state { : dir : water} &as self} val]
     (let [val (or val 1)]
       (tset self :state :water (clamp 0 (+ water val) 8))))
+
+  (fn turn! [{:state {: dir : image} &as self} new-dir]
+    (self:setImage (image:getImage (case new-dir :left 1 :up 2 :right 3 :down 4)))
+    (tset self.state :dir new-dir))
+
+  (fn player-interact! [{:state { : dir : water} &as self} primary?]
+    (if primary?
+        (self:turn! (case dir :left :up :up :right :right :down :down :left))
+        (self:water! 1))
+    )
 
   (fn react! [{:state { : dir : water} &as self}]
     (when (<= water 0)
@@ -44,6 +55,8 @@
       (redirect:setCollidesWithGroups [3])
       (tset redirect :react! react!)
       (tset redirect :water! water!)
+      (tset redirect :turn! turn!)
+      (tset redirect :player-interact! player-interact!)
       (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
       (tset redirect :state {: image : dir :water 8})

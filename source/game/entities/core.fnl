@@ -10,8 +10,13 @@
 
       tree-hud (require :source.game.entities.tree_hud)
       hud (require :source.game.entities.hud)
+
+      map-selector (require :source.game.entities.map_selector)
+      warp (require :source.game.entities.warp)
       ]
   {: player  : fairy : tree : spawner : redirect : splitter : happy : sad
    : sprinkler
 
-   : tree-hud : hud})
+   : tree-hud : hud
+
+   : map-selector : warp})

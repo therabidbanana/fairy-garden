@@ -30,7 +30,7 @@
                                     ))
                                 )
                      :options [
-                               {:text "Level 1" :id :level_1 :action #(scene-manager:select! :level_1)}
+                               {:text "Welcome" :id :level_1 :action #(scene-manager:select! :level_1)}
                                {:text "Level 2" :id :level_2 :action #(scene-manager:select! :level_2)}
                                {:text "Level 3" :id :level_3 :action #(scene-manager:select! :level_3)}
                                ]})

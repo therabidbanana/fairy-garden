@@ -23,7 +23,7 @@
   (fn react! [{:state { : dir : total-fairies : rejected-fairies : accepted-fairies} &as self} $scene]
     (if (>= (+ rejected-fairies accepted-fairies) total-fairies)
         ($ui:open-textbox! {:text (.. "All fairies accounted for. " accepted-fairies " of " total-fairies " are staying.")
-                            :action #(scene-manager:select! :menu)} ))
+                            :action #(scene-manager:select! :map)} ))
     )
   (fn collisionResponse [self other]
     :overlap)

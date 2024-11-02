@@ -38,14 +38,8 @@
     (self:->stop!)
     ($ui:open-menu! {:can-exit? true
                      :options [
-                               {:text (.. "(" redirect.cost ") " "Up")
-                                :action #(self:purchase-and-place! {:type :redirect :dir :up})}
-                               {:text (.. "(" redirect.cost ") " "Down")
-                                :action #(self:purchase-and-place! {:type :redirect :dir :down})}
-                               {:text (.. "(" redirect.cost ") " "Left")
+                               {:text (.. "(" redirect.cost ") " "Redirect")
                                 :action #(self:purchase-and-place! {:type :redirect :dir :left})}
-                               {:text (.. "(" redirect.cost ") " "Right")
-                                :action #(self:purchase-and-place! {:type :redirect :dir :right})}
                                {:text (.. "(" sprinkler.cost ") " "Sprinkler")
                                 :action #(self:purchase-and-place! {:type :sprinkler})}
                                {:text (.. "(" happy.cost ") " "Tulip")
@@ -124,6 +118,7 @@
       (player:setCollideRect 0 0 32 32)
       (player:setGroups [1])
       (player:setCollidesWithGroups [])
+      (player:setZIndex 12)
       ;; (tset player :draw draw)
       (tset player :player? true)
       (tset player :update update)

@@ -29,8 +29,8 @@ Bugs:
 
 Polish:
 
-- [ ] Level map
-- [ ] Player hand
+- [x] Level map
+- [x] Player hand
 - [ ] Confirm placement
 - [ ] Disable / hide purchase
 - [ ] Better visualize cost, describe item

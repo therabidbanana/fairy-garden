@@ -37,7 +37,7 @@
                    :countdown (or (?. wave_countdowns i) 300)})]
       waves))
 
-  (fn new! [x y {: tile-h : tile-w :layer-details { : grid-w : locations : wave-details}}]
+  (fn new! [x y {: tile-h : tile-w : fields :layer-details { : grid-w : locations : wave-details}}]
     (let [tile-x (div x tile-w)
           tile-y (div y tile-h)
           spawner (gfx.sprite.new)]
@@ -46,6 +46,7 @@
       (inspect (parse-wave wave-details))
       (tset spawner :react! react!)
       (tset spawner :spawner? true)
+      (tset spawner :fields fields)
       (tset locations :spawner {: tile-x : tile-y})
       (tset spawner :state {:timer 100 :max-timer 100
                             :waves (parse-wave wave-details)

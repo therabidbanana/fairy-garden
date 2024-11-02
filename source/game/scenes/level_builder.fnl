@@ -32,7 +32,10 @@
     (let [menu (playdate.getSystemMenu)]
       (each [i v (ipairs (menu:getMenuItems))]
         (menu:removeMenuItem v))
-      (menu:addMenuItem "Give Up" (fn [] (scene-manager:select! :menu))))
+      (menu:addMenuItem "Give Up" (fn []
+                                    ($ui:pop-all!)
+                                    (scene-manager:select! :map)
+                                    )))
     (let [tile-size 32
           grid-w (div level.w tile-size)
           grid-h (div level.h tile-size)
@@ -59,6 +62,8 @@
           tree-hud (-> (entity-map.tree-hud.new! tree) (: :add))
           hud (-> (entity-map.hud.new! player) (: :add))
           ]
-
+      (if spawner.fields.intro
+          ($ui:open-textbox! {:text spawner.fields.intro})
+          )
       {: player : tree : spawner : stage-width : stage-height : graph : grid-w}
      )))

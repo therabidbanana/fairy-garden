@@ -61,6 +61,7 @@
                         (if (?. v :spawner?) v)) 1)
           tree-hud (-> (entity-map.tree-hud.new! tree) (: :add))
           hud (-> (entity-map.hud.new! player) (: :add))
+          chosen-item (-> (entity-map.chosen-item.new! player) (: :add))
           ]
       (if spawner.fields.intro
           ($ui:open-textbox! {:text spawner.fields.intro})

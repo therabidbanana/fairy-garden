@@ -30,8 +30,14 @@
         (->
          (class.new! ideal-x ideal-y { :fields item : tile-w : tile-h })
          (: :add))
-        (tset self.state :cash new-cash))
+        (tset self.state :cash new-cash)
+        (tset self.state :chosen-item nil)
+        )
       )
+    )
+
+  (fn choose-item! [self item]
+    (tset self.state :chosen-item item)
     )
 
   (fn shop! [self]
@@ -39,23 +45,27 @@
     ($ui:open-menu! {:can-exit? true
                      :options [
                                {:text (.. "(" redirect.cost ") " "Redirect")
-                                :action #(self:purchase-and-place! {:type :redirect :dir :left})}
+                                :action #(self:choose-item! {:type :redirect :dir :left})}
                                {:text (.. "(" sprinkler.cost ") " "Sprinkler")
-                                :action #(self:purchase-and-place! {:type :sprinkler})}
+                                :action #(self:choose-item! {:type :sprinkler})}
+                               {:text (.. "(" splitter.cost ") " "Splitter")
+                                :action #(self:choose-item! {:type :splitter :dir :left})}
                                {:text (.. "(" happy.cost ") " "Tulip")
-                                :action #(self:purchase-and-place! {:type :tulip})}
-                               {:text (.. "(" splitter.cost ") " "Splitter L/R")
-                                :action #(self:purchase-and-place! {:type :splitter :dir :left})}
-                               {:text (.. "(" splitter.cost ") " "Splitter U/D")
-                                :action #(self:purchase-and-place! {:type :splitter :dir :up})}
+                                :action #(self:choose-item! {:type :tulip})}
                                ]})
     )
 
   (fn react! [{: state : height : x : y : width &as self} $scene]
-    (if (justpressed? playdate.kButtonLeft) (self:->left!)
-        (justpressed? playdate.kButtonRight) (self:->right!)
-        (justpressed? playdate.kButtonUp) (self:->up!)
-        (justpressed? playdate.kButtonDown) (self:->down!))
+    (when (= nil state.chosen-item)
+      (if (justpressed? playdate.kButtonLeft) (self:->left!)
+          (justpressed? playdate.kButtonRight) (self:->right!)
+          (justpressed? playdate.kButtonUp) (self:->up!)
+          (justpressed? playdate.kButtonDown) (self:->down!)))
+    (when state.chosen-item
+      (if (justpressed? playdate.kButtonLeft) (tset state.chosen-item :dir :left)
+          (justpressed? playdate.kButtonRight) (tset state.chosen-item :dir :right)
+          (justpressed? playdate.kButtonUp) (tset state.chosen-item :dir :up)
+          (justpressed? playdate.kButtonDown) (tset state.chosen-item :dir :down)))
     (let [(dx dy) (self:tile-movement-react! state.speed)
           dx (if (and (>= (+ x width) $scene.state.stage-width) (> dx 0)) 0
                  (and (<= x 0) (< dx 0)) 0
@@ -75,12 +85,20 @@
 
       ;; (if (playdate.buttonJustPressed playdate.kButtonB)
       ;;     (scene-manager:select! :menu))
-      (if (and (playdate.buttonJustPressed playdate.kButtonB)
+      (if
+       (and (playdate.buttonJustPressed playdate.kButtonB)
+            state.chosen-item)
+       (tset state :chosen-item nil)
+       (and (playdate.buttonJustPressed playdate.kButtonB)
                (?. overlapping :water!))
           (do
             ($particles.splash! self.x self.y)
             (overlapping:water! 1)))
-      (if (and (playdate.buttonJustPressed playdate.kButtonA)
+      (if
+       (and (playdate.buttonJustPressed playdate.kButtonA)
+            state.chosen-item)
+       (self:purchase-and-place! state.chosen-item)
+       (and (playdate.buttonJustPressed playdate.kButtonA)
                (?. overlapping :player-interact!))
           (overlapping:player-interact! true)
           (and (playdate.buttonJustPressed playdate.kButtonA)
@@ -89,13 +107,20 @@
       )
     self)
 
-  (fn update [{:state {: animation : dx : dy : walking?} &as self}]
+  (fn update [{:state {: item-table : animation : dx : dy : walking?} &as self}]
     (let [target-x (+ dx self.x)
           target-y (+ dy self.y)
           (x y collisions count) (self:moveWithCollisions target-x target-y)]
       (tset self :state :dx 0)
       (tset self :state :dy 0)
-      (self:setImage (animation:getImage))
+      (tset self :state :even-tick (not (or self.state.even-tick false)))
+      (if self.state.chosen-item
+          (self:setImage (: (?. item-table self.state.chosen-item.type) :getImage 1))
+          (self:setImage (animation:getImage)))
+      (if (and self.state.chosen-item self.state.even-tick)
+          (self:setVisible false)
+          (self:setVisible true)
+          )
       (self:markDirty))
     )
 
@@ -112,6 +137,12 @@
           animation (anim.new {: image :states [{:state :walking :start 1 :end 4}]})
           player (gfx.sprite.new)
           cash  (or (?. fields cash) 10)
+          item-table
+          {:tulip (gfx.imagetable.new :assets/images/tulip)
+           :redirect (gfx.imagetable.new :assets/images/redirect)
+           :splitter (gfx.imagetable.new :assets/images/splitter)
+           :sprinkler (gfx.imagetable.new :assets/images/sprinkler)
+           }
           ]
       (player:setCenter 0 0)
       (player:setBounds x y 32 32)
@@ -126,7 +157,8 @@
       (tset player :react! react!)
       (tset player :purchase-and-place! purchase-and-place!)
       (tset player :shop! shop!)
-      (tset player :state {: cash : animation :speed 6 :dx 0 :dy 0 :visible true})
+      (tset player :choose-item! choose-item!)
+      (tset player :state {: cash : item-table : animation :speed 6 :dx 0 :dy 0 :visible true})
       (tile.add! player {: tile-h : tile-w})
       player)))
 

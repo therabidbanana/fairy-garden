@@ -31,8 +31,8 @@ Polish:
 
 - [x] Level map
 - [x] Player hand
-- [ ] Confirm placement
-- [ ] Disable / hide purchase
+- [ ] Confirm placement - add dir
+- [ ] Disable / hide purchase on cost
 - [ ] Better visualize cost, describe item
 
 

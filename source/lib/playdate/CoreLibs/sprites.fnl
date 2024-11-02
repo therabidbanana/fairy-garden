@@ -113,9 +113,13 @@
      (tset self :image image)))
  (fn instance-update [self] self)
 
+ (fn setVisible [self visible]
+   (tset self :visible visible))
+
  (fn draw [self x y]
-   (if self.image
-       (self.image:draw x y))
+   (if
+    (not self.visible) nil
+    self.image (self.image:draw x y))
    ;; (love.graphics.drawq self.image self.x self.y)
    )
 
@@ -347,8 +351,10 @@
          width 1
          height 1
          ignores-offset false
+         visible true
          sprite { : x : y : width : height : z-index : groups
                   : ignores-offset
+                  : visible
                   :update instance-update}]
      (setmetatable sprite {:__index _G.playdate.graphics.sprite})
      sprite)

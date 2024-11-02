@@ -10,6 +10,7 @@
 
       tree-hud (require :source.game.entities.tree_hud)
       hud (require :source.game.entities.hud)
+      chosen-item (require :source.game.entities.chosen-item)
 
       map-selector (require :source.game.entities.map_selector)
       warp (require :source.game.entities.warp)
@@ -17,6 +18,6 @@
   {: player  : fairy : tree : spawner : redirect : splitter : happy : sad
    : sprinkler
 
-   : tree-hud : hud
+   : tree-hud : hud : chosen-item
 
    : map-selector : warp})

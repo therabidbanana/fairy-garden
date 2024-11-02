@@ -1,18 +1,13 @@
 (import-macros {: inspect : defns : div} :source.lib.macros)
 
-(defns :hud
+(defns :chosen-item
   [gfx playdate.graphics
    $ui (require :source.lib.ui)]
 
   (fn react! [{:state { : player &as state} &as self}]
-    (let [player-cash (or (?. player :state :cash) 0)
-          chosen-item (or (?. player :state :chosen-item) nil)]
-      (when (not= player-cash state.player-cash)
-        (tset state :player-cash player-cash)
-        (tset state :dirty true)
-        )
+    (let [chosen-item (or (?. player :state :chosen-item) nil)]
       (when (not= chosen-item state.chosen-item)
-        (tset state :player-cash player-cash)
+        (tset state :chosen-item chosen-item)
         (tset state :dirty true)
         )
       ;; (when (not= player-held state.player-held)
@@ -24,16 +19,17 @@
 
   (fn draw [self]
     (let [rect (playdate.geometry.rect.new 0 0
-                                           60 20)]
-      (gfx.setColor gfx.kColorWhite)
-      (gfx.fillRoundRect rect 4)
-      (gfx.setLineWidth 2)
-      (gfx.setColor gfx.kColorBlack)
-      (gfx.drawRoundRect rect 4)
-      (gfx.setColor gfx.kColorBlack)
-      (gfx.drawText (.. "$" (or self.state.player-cash 0)) ;;(rect:insetBy 6 2)
-                             6 2
-                             )
+                                           240 20)]
+      (when self.state.chosen-item
+        (gfx.setColor gfx.kColorWhite)
+        (gfx.fillRoundRect rect 4)
+        (gfx.setLineWidth 2)
+        (gfx.setColor gfx.kColorBlack)
+        (gfx.drawRoundRect rect 4)
+        (gfx.setColor gfx.kColorBlack)
+        (self.tagFont:drawText (.. "Place " self.state.chosen-item.type) ;;(rect:insetBy 6 2)
+                          6 2
+                          ))
       )
 
     )
@@ -53,7 +49,7 @@
   ;;   (other:collisionResponse))
   (fn new! [player]
     (let [hud (gfx.sprite.new)]
-      (hud:moveTo 10 0)
+      (hud:moveTo 80 210)
       (hud:setSize 240 100)
       (hud:setCenter 0 0)
       (hud:setZIndex 1000)

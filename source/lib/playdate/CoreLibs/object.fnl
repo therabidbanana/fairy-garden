@@ -11,6 +11,7 @@
   [ds (require :source.lib.playdate.CoreLibs.datastore)
    keyboard (require :source.lib.playdate.CoreLibs.keyboard)
    sound (require :source.lib.playdate.CoreLibs.sound)
+   menu (require :source.lib.playdate.CoreLibs.menu)
    pathfinder (require :source.lib.playdate.CoreLibs.pathfinder)]
   (local input-state
          {:timer 0

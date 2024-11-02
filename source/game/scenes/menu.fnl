@@ -9,7 +9,9 @@
 
   (local state {})
   (fn enter! [$ game-state]
-    (inspect game-state)
+    (let [menu (playdate.getSystemMenu)]
+      (each [i v (ipairs (menu:getMenuItems))]
+        (menu:removeMenuItem v)))
     (playdate.graphics.setDrawOffset 0 0)
     ($ui:open-menu! {:on-draw (fn [comp selected]
                                 (gfx.clear)

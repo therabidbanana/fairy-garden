@@ -8,6 +8,7 @@
    libgraph (require :source.lib.graph)
    $ui (require :source.lib.ui)
    $particles (require :source.game.particles)
+   scene-manager (require :source.lib.scene-manager)
    ]
 
   (fn stage-tick! [{: state &as $scene}]
@@ -28,6 +29,10 @@
     )
 
   (fn build! [level]
+    (let [menu (playdate.getSystemMenu)]
+      (each [i v (ipairs (menu:getMenuItems))]
+        (menu:removeMenuItem v))
+      (menu:addMenuItem "Give Up" (fn [] (scene-manager:select! :menu))))
     (let [tile-size 32
           grid-w (div level.w tile-size)
           grid-h (div level.h tile-size)

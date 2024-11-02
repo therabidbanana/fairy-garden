@@ -31,8 +31,10 @@ Polish:
 
 - [x] Level map
 - [x] Player hand
-- [ ] Confirm placement - add dir
+- [x] Confirm placement
+- [ ] Health bar - extract and add to splitter
 - [ ] Disable / hide purchase on cost
+- [ ] Happy / Sad particles
 - [ ] Better visualize cost, describe item
 
 

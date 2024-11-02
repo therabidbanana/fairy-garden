@@ -46,7 +46,8 @@
           tile-y (div y tile-h)
           dir (or (?. fields :dir) :right)
           image (gfx.imagetable.new :assets/images/splitter)
-          redirect (gfx.sprite.new)]
+          redirect (gfx.sprite.new)
+          ]
       (redirect:setImage (image:getImage (case dir :left 1 :up 2 :right 3 :down 4)))
       (redirect:setCenter 0 0)
       (redirect:setBounds x y 32 32)

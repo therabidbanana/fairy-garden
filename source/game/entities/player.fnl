@@ -62,10 +62,10 @@
           (justpressed? playdate.kButtonUp) (self:->up!)
           (justpressed? playdate.kButtonDown) (self:->down!)))
     (when state.chosen-item
-      (if (justpressed? playdate.kButtonLeft) (tset state.chosen-item :dir :left)
-          (justpressed? playdate.kButtonRight) (tset state.chosen-item :dir :right)
-          (justpressed? playdate.kButtonUp) (tset state.chosen-item :dir :up)
-          (justpressed? playdate.kButtonDown) (tset state.chosen-item :dir :down)))
+      (if (justpressed? playdate.kButtonLeft) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :left))
+          (justpressed? playdate.kButtonRight) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :right))
+          (justpressed? playdate.kButtonUp) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :up))
+          (justpressed? playdate.kButtonDown) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :down))))
     (let [(dx dy) (self:tile-movement-react! state.speed)
           dx (if (and (>= (+ x width) $scene.state.stage-width) (> dx 0)) 0
                  (and (<= x 0) (< dx 0)) 0
@@ -115,7 +115,9 @@
       (tset self :state :dy 0)
       (tset self :state :even-tick (not (or self.state.even-tick false)))
       (if self.state.chosen-item
-          (self:setImage (: (?. item-table self.state.chosen-item.type) :getImage 1))
+          (self:setImage (: (?. item-table self.state.chosen-item.type) :getImage
+                            (case (or self.state.chosen-item.dir :left)
+                              :left 1 :up 2 :right 3 :down 4)))
           (self:setImage (animation:getImage)))
       (if (and self.state.chosen-item self.state.even-tick)
           (self:setVisible false)

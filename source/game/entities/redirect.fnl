@@ -4,14 +4,15 @@
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
+   life-bar      (require :source.game.entities.life_bar)
    $ui           (require :source.lib.ui)]
   (local cost 1)
 
-  (fn react! [{:state { : dir : water : water-bar} &as self}]
+  (fn react! [{:state { : dir : water } &as self}]
     (when (<= water 0)
       (print "Out of water")
       (self:remove)
-      (water-bar:remove)
+      (self.life-bar:remove)
       ))
 
   (fn interacted! [{:state { : dir : water} &as self} fairy]
@@ -34,10 +35,8 @@
           new-water (clamp 0 (+ water val) 8)]
       (self:update-water! new-water)))
 
-  (fn update-water! [{:state { : dir : water : water-bar : water-image} &as self} new-water]
+  (fn update-water! [{:state { : dir : water} &as self} new-water]
     (print (.. "Watered! " new-water))
-    (if (> new-water 0)
-        (water-bar:setImage (water-image:getImage new-water)))
     (tset self :state :water new-water)
     )
 
@@ -50,20 +49,14 @@
           dir (or (?. fields :dir) :right)
           image (gfx.imagetable.new :assets/images/redirect)
           redirect (gfx.sprite.new)
-          water-image (gfx.imagetable.new :assets/images/life-bar)
-          water-bar (gfx.sprite.new)
           water 8]
       (redirect:setImage (image:getImage (case dir :left 1 :up 2 :right 3 :down 4)))
       (redirect:setCenter 0 0)
-      (water-bar:setImage (water-image:getImage water))
-      (water-bar:setCenter 0 0)
-      (water-bar:setBounds x y 32 8)
       (redirect:setBounds x y 32 32)
       (redirect:setCollideRect 0 0 32 32)
       (redirect:setGroups [4])
       (redirect:setCollidesWithGroups [3])
-      (tset redirect :base-add redirect.add)
-      (tset redirect :add #(do ($1:base-add) ($1.state.water-bar:add)))
+      (tset redirect :life-bar (life-bar.new! x y {:linked redirect :curr 8 :field :water}))
       (tset redirect :react! react!)
       (tset redirect :water! water!)
       (tset redirect :interacted! interacted!)
@@ -71,5 +64,5 @@
       (tset redirect :update-water! update-water!)
       (tset redirect :player-interact! player-interact!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {: dir : water : image : water-bar : water-image})
+      (tset redirect :state {: dir : water : image})
       redirect)))

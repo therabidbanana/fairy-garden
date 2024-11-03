@@ -22,7 +22,7 @@
            &as loaded} (prepare-level! level_0
                                        entity-map
                                        {:floor   {:z-index -110}
-                                        :warp    { : levels : grid-w : grid-h }
+                                        :warp    { : levels : grid-w : grid-h : game-state }
                                         :tiles   {:z-index -10}})
           selected-level (or (?. game-state :selected) :level_1)
           warp (?. levels selected-level)
@@ -68,6 +68,7 @@
 
   (fn ->forward! [{: state &as $scene} game-state]
     (let [keys (icollect [k v (pairs state.levels)] k)
+          _ (table.sort keys)
           curr (or (?. (icollect [i v (ipairs keys)] (if (= v state.selected) i)) 1) 1)
           new-key (or (?. keys (+ curr 1)) (?. keys 1))
           new-warp (?. state.levels new-key)]
@@ -77,30 +78,37 @@
 
   (fn ->backward! [{: state &as $scene} game-state]
     (let [keys (icollect [k v (pairs state.levels)] k)
+          _ (table.sort keys)
           curr (or (?. (icollect [i v (ipairs keys)] (if (= v state.selected) i)) 1) 1)
-          new-key (or (?. keys (- curr 1)) (?. keys 1))
+          new-key (or (?. keys (- curr 1)) (?. keys (length keys)))
           new-warp (?. state.levels new-key)]
       (tset state :selected new-key)
       (state.selector:moveTo new-warp.x new-warp.y))
     )
 
   (fn tick! [{: state &as $scene} game-state]
-    (if ($ui:active?) ($ui:tick!) ;; tick if open
-        (do
-          (if (justpressed? playdate.kButtonLeft) (->backward! $scene game-state)
-              (justpressed? playdate.kButtonRight) (->forward! $scene game-state)
-              (justpressed? playdate.kButtonUp) (->backward! $scene game-state)
-              (justpressed? playdate.kButtonDown) (->forward! $scene game-state)
-              (justpressed? playdate.kButtonA) (scene-manager:select! state.selected)
-              )
-          (let [player-x state.selector.x
-                player-y state.selector.y
-                center-x (clamp 0 (- player-x 200) (- state.stage-width 400))
-                center-y (clamp 0 (- player-y 120) (- state.stage-height 240))]
-            ;; (gfx.sprite.performOnAllSprites (fn react-each [ent] (if (?. ent :react!) (ent:react! $scene game-state))))
-            (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
-            ))
-        )
+    (let [warp (?. state.levels state.selected)
+          unlock-state (?. game-state warp.state.unlock)
+          unlock-stars (or (?. unlock-state :stars) 0)
+          unlocked? (or (= nil warp.state.unlock)
+                        (>= unlock-stars 1))]
+      (if ($ui:active?) ($ui:tick!) ;; tick if open
+         (do
+           (if (justpressed? playdate.kButtonLeft) (->backward! $scene game-state)
+               (justpressed? playdate.kButtonRight) (->forward! $scene game-state)
+               (justpressed? playdate.kButtonUp) (->backward! $scene game-state)
+               (justpressed? playdate.kButtonDown) (->forward! $scene game-state)
+               (and (justpressed? playdate.kButtonA) unlocked?)
+               (scene-manager:select! state.selected)
+               )
+           (let [player-x state.selector.x
+                 player-y state.selector.y
+                 center-x (clamp 0 (- player-x 200) (- state.stage-width 400))
+                 center-y (clamp 0 (- player-y 120) (- state.stage-height 240))]
+             ;; (gfx.sprite.performOnAllSprites (fn react-each [ent] (if (?. ent :react!) (ent:react! $scene game-state))))
+             (gfx.setDrawOffset (- 0 center-x) (- 0 center-y))
+             ))
+         ))
     )
   )
 

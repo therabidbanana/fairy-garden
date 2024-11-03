@@ -14,7 +14,7 @@
                (do
                  (print (.. ,inspected " => "))
                  (printTable ,val))
-               (print (.. ,inspected " => " ,val)))
+               (print (.. ,inspected " => " (if (= nil ,val) "nil" ,val))))
            result#))))
 
 (fn div [a b]
@@ -64,7 +64,9 @@
     `(do
        (fn _G.printTable [tbl#]
          (fn tostr# [val#]
-           (if (= (type val#) :table)
+           (if (= val# nil)
+               (.. "nil")
+               (= (type val#) :table)
                (.. "{"
                    (table.concat (icollect [i# v# (pairs val#)]
                                    (.. i# " = " (or (tostr# v#) "nil"))) "\n")

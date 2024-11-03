@@ -1,4 +1,4 @@
-APP_NAME := test
+APP_NAME := fairy-garden
 
 compile: source/**/*.fnl
 	./support/build.sh
@@ -30,7 +30,7 @@ win-love-package: win-love-compile
 	powershell.exe "mv app.zip ${APP_NAME}.love"
 
 win-love-web: win-love-package
-	powershell.exe "npx love.js.cmd -t Playdate -c .\${APP_NAME}.love dist"
+	powershell.exe "npx love.js.cmd -m 134217728 -t 'Fairy Garden' .\${APP_NAME}.love dist"
 
 win-love-serve: win-love-web
 	powershell.exe "Start-Process powershell.exe 'python -m http.server 8000 -d dist'"

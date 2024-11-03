@@ -63,6 +63,8 @@
           hud (-> (entity-map.hud.new! player) (: :add))
           chosen-item (-> (entity-map.chosen-item.new! player) (: :add))
           ]
+      (each [_ v (ipairs loaded.entities)]
+        (if (?. v :life-bar) (v.life-bar:add)))
       (if spawner.fields.intro
           ($ui:open-textbox! {:text spawner.fields.intro})
           )

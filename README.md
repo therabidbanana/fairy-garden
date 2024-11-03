@@ -30,6 +30,7 @@ Bugs:
 - [x] Sprinkler splashes level 2 in Love are two tiles off when right
 - [x] Player can't get to right wall in love
 - [ ] Fix debug draw offset in Love
+- [ ] Fairies can leave map
 
 Polish:
 
@@ -40,6 +41,7 @@ Polish:
 - [ ] Disable / hide purchase on cost
 - [x] Happy / Sad particles
 - [ ] Better visualize cost, describe item
+- [ ] Better perf in LoveJs?
 
 
 Ideas:

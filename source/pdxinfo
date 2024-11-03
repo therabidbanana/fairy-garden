@@ -1,7 +1,7 @@
-name=Fennel test
+name=Fairy Garden
 author=therabidbanana
-description=Fennel Test Game
-bundleID=com.davidhaslem.fennel-test
+description=Make a home for fairies
+bundleID=com.davidhaslem.fairy-garden
 version=1.0
 buildNumber=1
 imagePath=assets

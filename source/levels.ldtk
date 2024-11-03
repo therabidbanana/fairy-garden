@@ -11,7 +11,7 @@
 	"iid": "7e489f20-6280-11ee-94e3-4b3019ff8156",
 	"jsonVersion": "1.5.3",
 	"appBuildId": 473703,
-	"nextUid": 54,
+	"nextUid": 55,
 	"identifierStyle": "Lowercase",
 	"toc": [],
 	"worldLayout": "Free",
@@ -834,6 +834,43 @@
 					"allowedRefsEntityUid": null,
 					"allowedRefTags": [],
 					"tilesetUid": null
+				},
+				{
+					"identifier": "unlock",
+					"doc": null,
+					"__type": "String",
+					"uid": 54,
+					"type": "F_String",
+					"isArray": false,
+					"canBeNull": true,
+					"arrayMinLength": null,
+					"arrayMaxLength": null,
+					"editorDisplayMode": "Hidden",
+					"editorDisplayScale": 1,
+					"editorDisplayPos": "Above",
+					"editorLinkStyle": "StraightArrow",
+					"editorDisplayColor": null,
+					"editorAlwaysShow": false,
+					"editorShowInWorld": true,
+					"editorCutLongValues": true,
+					"editorTextSuffix": null,
+					"editorTextPrefix": null,
+					"useForSmartColor": false,
+					"exportToToc": false,
+					"searchable": false,
+					"min": null,
+					"max": null,
+					"regex": null,
+					"acceptFileTypes": null,
+					"defaultOverride": null,
+					"textLanguageMode": null,
+					"symmetricalRef": false,
+					"autoChainRef": true,
+					"allowOutOfLevelRef": true,
+					"allowedRefs": "OnlySame",
+					"allowedRefsEntityUid": null,
+					"allowedRefTags": [],
+					"tilesetUid": null
 				}
 			]
 		},
@@ -1304,7 +1341,8 @@
 								{ "__identifier": "title", "__type": "String", "__value": "Welcome!", "__tile": null, "defUid": 48, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Welcome!"]
-								}] }
+								}] },
+								{ "__identifier": "unlock", "__type": "String", "__value": null, "__tile": null, "defUid": 54, "realEditorValues": [] }
 							],
 							"__worldX": 256,
 							"__worldY": 416
@@ -1329,7 +1367,8 @@
 								{ "__identifier": "title", "__type": "String", "__value": "Sprinklers", "__tile": null, "defUid": 48, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Sprinklers"]
-								}] }
+								}] },
+								{ "__identifier": "unlock", "__type": "String", "__value": null, "__tile": null, "defUid": 54, "realEditorValues": [] }
 							],
 							"__worldX": 224,
 							"__worldY": 352
@@ -1354,10 +1393,40 @@
 								{ "__identifier": "title", "__type": "String", "__value": "Next Up", "__tile": null, "defUid": 48, "realEditorValues": [{
 									"id": "V_String",
 									"params": ["Next Up"]
-								}] }
+								}] },
+								{ "__identifier": "unlock", "__type": "String", "__value": null, "__tile": null, "defUid": 54, "realEditorValues": [] }
 							],
 							"__worldX": 288,
 							"__worldY": 320
+						},
+						{
+							"__identifier": "warp",
+							"__grid": [7,8],
+							"__pivot": [0,0],
+							"__tags": [],
+							"__tile": null,
+							"__smartColor": "#FEE761",
+							"iid": "9c07e4a0-73f0-11ef-8eb0-4bb02a4c497b",
+							"width": 32,
+							"height": 32,
+							"defUid": 46,
+							"px": [224,256],
+							"fieldInstances": [
+								{ "__identifier": "level", "__type": "String", "__value": "level_4", "__tile": null, "defUid": 47, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["level_4"]
+								}] },
+								{ "__identifier": "title", "__type": "String", "__value": "This time It's Serious", "__tile": null, "defUid": 48, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["This time It's Serious"]
+								}] },
+								{ "__identifier": "unlock", "__type": "String", "__value": "level_1", "__tile": null, "defUid": 54, "realEditorValues": [{
+									"id": "V_String",
+									"params": ["level_1"]
+								}] }
+							],
+							"__worldX": 224,
+							"__worldY": 256
 						}
 					]
 				},
@@ -1384,6 +1453,7 @@
 					"seed": 1668546,
 					"overrideTilesetUid": null,
 					"gridTiles": [
+						{ "px": [224,256], "src": [0,0], "f": 0, "t": 0, "d": [111], "a": 1 },
 						{ "px": [256,256], "src": [96,32], "f": 0, "t": 11, "d": [112], "a": 1 },
 						{ "px": [256,288], "src": [96,32], "f": 0, "t": 11, "d": [125], "a": 1 },
 						{ "px": [256,320], "src": [96,32], "f": 0, "t": 11, "d": [138], "a": 1 },

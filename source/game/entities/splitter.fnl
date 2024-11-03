@@ -4,6 +4,7 @@
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
+   life-bar      (require :source.game.entities.life_bar)
    $ui           (require :source.lib.ui)]
   (local cost 1)
 
@@ -36,6 +37,7 @@
   (fn react! [{:state { : dir : water} &as self}]
     (when (<= water 0)
       (print "Out of water")
+      (self.life-bar:remove)
       (self:remove)))
 
   (fn collisionResponse [self other]
@@ -54,6 +56,7 @@
       (redirect:setCollideRect 0 0 32 32)
       (redirect:setGroups [4])
       (redirect:setCollidesWithGroups [3])
+      (tset redirect :life-bar (life-bar.new! x y {:linked redirect :curr 8 :field :water}))
       (tset redirect :react! react!)
       (tset redirect :water! water!)
       (tset redirect :turn! turn!)

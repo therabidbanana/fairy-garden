@@ -5,6 +5,9 @@
       redirect  (require :source.game.entities.redirect)
       splitter  (require :source.game.entities.splitter)
       happy  (require :source.game.entities.happy)
+      statue  (require :source.game.entities.statue)
+      animal_statue  (require :source.game.entities.animal_statue)
+      marigold  (require :source.game.entities.marigold)
       sad  (require :source.game.entities.sad)
       sprinkler  (require :source.game.entities.sprinkler)
 
@@ -15,8 +18,10 @@
       map-selector (require :source.game.entities.map_selector)
       warp (require :source.game.entities.warp)
       ]
-  {: player  : fairy : tree : spawner : redirect : splitter : happy : sad
+  {: player  : fairy : tree : spawner : redirect : splitter : sad
    : sprinkler
+
+   : marigold : happy : statue : animal_statue
 
    : tree-hud : hud : chosen-item
 

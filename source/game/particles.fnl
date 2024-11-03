@@ -22,4 +22,15 @@
           anim (gfx.animation.loop.new 80 image false)]
       (table.insert state.particles {: anim : x : y})))
 
-  {: splash! : draw-all })
+  (fn heart! [x y]
+    (let [image (gfx.imagetable.new :assets/images/heart)
+          anim (gfx.animation.loop.new 110 image false)]
+      (table.insert state.particles {: anim : x : y})))
+
+  (fn sad! [x y]
+    (let [image (gfx.imagetable.new :assets/images/sad)
+          anim (gfx.animation.loop.new 110 image false)]
+      (table.insert state.particles {: anim : x : y})))
+
+
+  {: splash! : draw-all : heart! : sad!})

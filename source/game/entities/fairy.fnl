@@ -5,6 +5,7 @@
    scene-manager (require :source.lib.scene-manager)
    tile (require :source.lib.behaviors.tile-movement)
    $ui (require :source.lib.ui)
+   $particles (require :source.game.particles)
    anim (require :source.lib.animation)]
 
   (fn plan-next-step [state {:state {: graph } &as scene}]
@@ -31,10 +32,12 @@
 
   (fn add-happiness! [{: state &as self} val]
     (let [new-hap (+ val state.happiness)]
+      ($particles.heart! (+ self.x 6) (+ self.y 6))
       (tset state :happiness new-hap)))
 
   (fn add-sadness! [{: state &as self} val]
     (let [new-hap (+ val state.happiness)]
+      ($particles.sad! (+ self.x 6) (+ self.y 6))
       (tset state :happiness new-hap)))
 
   (fn react-at-tile! [self]

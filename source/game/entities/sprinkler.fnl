@@ -37,7 +37,7 @@
               :right-up (- self.y self.height)
               :down (+ self.y self.height)
               :left-down (+ self.y self.height)
-              :left-down (+ self.y self.height)
+              :right-down (+ self.y self.height)
               _ self.y)
           ]
       (values x y)))

@@ -25,6 +25,12 @@
 
   (fn debug-draw! [$]
     ;; ($.state.graph:draw)
+    ;; (gfx.sprite.performOnAllSprites
+    ;;  (fn [ent]
+    ;;    (if ent.collisionBox
+    ;;        (gfx.drawRoundRect ent.collisionBox 1)
+    ;;        ;; (gfx.drawCircleInRect ent.x ent.y ent.width ent.height 1)
+    ;;        )))
     )
   )
 

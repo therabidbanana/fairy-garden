@@ -19,7 +19,9 @@
              ;; (love.graphics.pop)
              )
      :getSize (fn [self]
-                (let [q (?. quads n)] (q:getTextureDimensions))
+                (let [q (?. quads n)
+                      (x y w h) (q:getViewport)]
+                  (values w h))
                 )}
     )
 

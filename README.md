@@ -26,6 +26,10 @@ Bugs:
 - [x] Fix animation bug in love  - this doesn't look like it works (sprite:setImage (animation:getImage))
 - [x] Love menu offset issue - draws and displays top of map
 - [x] player can get off grid with repeated button mashing
+- [x] Filename substring bug with imagetables (animal-statue sprite pulling for statue sprite)
+- [x] Sprinkler splashes level 2 in Love are two tiles off when right
+- [x] Player can't get to right wall in love
+- [ ] Fix debug draw offset in Love
 
 Polish:
 
@@ -34,7 +38,7 @@ Polish:
 - [x] Confirm placement
 - [ ] Health bar - extract and add to splitter
 - [ ] Disable / hide purchase on cost
-- [ ] Happy / Sad particles
+- [x] Happy / Sad particles
 - [ ] Better visualize cost, describe item
 
 

@@ -15,17 +15,29 @@
       :down (tset self :state :dir :up)
       :left (tset self :state :dir :right)
       :right (tset self :state :dir :left)
+      :left-up (tset self :state :dir :down)
+      :right-down (tset self :state :dir :up)
+      :left-down (tset self :state :dir :right)
+      :right-up (tset self :state :dir :left)
       _ nil)
     {:add-happiness -1 :set-state dir})
 
   (fn -get-facing-x-y [{:state { : dir : water : timer} &as self}]
     (let [x (case dir
               :left (- self.x self.width)
+              :left-up (- self.x self.width)
+              :left-down (- self.x self.width)
               :right (+ self.x self.width)
+              :right-up (+ self.x self.width)
+              :right-down (+ self.x self.width)
               _ self.x)
           y (case dir
               :up (- self.y self.height)
+              :left-up (- self.y self.height)
+              :right-up (- self.y self.height)
               :down (+ self.y self.height)
+              :left-down (+ self.y self.height)
+              :left-down (+ self.y self.height)
               _ self.y)
           ]
       (values x y)))
@@ -44,11 +56,16 @@
             (when (?. to-water :water!) (to-water:water!))
             ($particles.splash! splash-x splash-y)
             (tset self :state :dir (case dir
-                                     :up :right
-                                     :right :down
-                                     :down :left
-                                     :left :up))
-            (self:setImage (image:getImage (case self.state.dir :left 1 :up 2 :right 3 :down 4)))
+                                     :up :right-up
+                                     :right-up :right
+                                     :right :right-down
+                                     :right-down :down
+                                     :down :left-down
+                                     :left-down :left
+                                     :left :left-up
+                                     :left-up :up
+                                     ))
+            (self:setImage (image:getImage (case self.state.dir :left 1 :up 2 :right 3 :down 4 :left-up 1 :right-up 2 :right-down 3 :left-down 4)))
             (self:markDirty)
             (tset self :state :timer max-timer))
           (tset self :state :timer new-t)
@@ -75,5 +92,5 @@
       ;; Sprinklers - should they interact with fairies?
       (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
-      (tset redirect :state {:timer 60 :max-timer 60 : dir : image})
+      (tset redirect :state {:timer 15 :max-timer 15 : dir : image})
       redirect)))

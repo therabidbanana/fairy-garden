@@ -67,17 +67,18 @@
           (justpressed? playdate.kButtonUp) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :up))
           (justpressed? playdate.kButtonDown) (if (?. state.chosen-item :dir) (tset state.chosen-item :dir :down))))
     (let [(dx dy) (self:tile-movement-react! state.speed)
-          dx (if (and (>= (+ x width) $scene.state.stage-width) (> dx 0)) 0
-                 (and (<= x 0) (< dx 0)) 0
-                 dx)
-          dy (if (and (>= (+ y height) $scene.state.stage-height) (> dy 0)) 0
-                 (and (<= y 0) (< dy 0)) 0
-                 dy)
+          dx      (if (and (>= (+ x width) $scene.state.stage-width) (> dx 0)) 0
+                      (and (<= x 0) (< dx 0)) 0
+                      dx)
+          dy      (if (and (>= (+ y height) $scene.state.stage-height) (> dy 0)) 0
+                      (and (<= y 0) (< dy 0)) 0
+                      dy)
           sprites-at (gfx.sprite.querySpritesAtPoint (+ x 1) (+ y 1))
           overlapping (?. (icollect [i v (ipairs sprites-at)]
                             (if (?. v :player?) nil v))
                           1)
           clear-square (= nil overlapping)
+          cranked  (math.abs (playdate.getCrankTicks 4))
           ]
       (tset self :state :dx dx)
       (tset self :state :dy dy)
@@ -91,12 +92,19 @@
        (tset state :chosen-item nil)
        (and (playdate.buttonJustPressed playdate.kButtonB)
             (?. overlapping :player-interact!))
-       (overlapping:player-interact! false)
+       (overlapping:player-interact! false 1)
+       (and (> cranked 0) (?. overlapping :player-interact!))
+       (overlapping:player-interact! false cranked)
        (and (playdate.buttonJustPressed playdate.kButtonB)
             (?. overlapping :water!))
        (do
          ($particles.splash! self.x self.y)
-         (overlapping:water! 1)))
+         (overlapping:water! 1))
+       (and (> cranked 0) (?. overlapping :water!))
+       (do
+         ($particles.splash! self.x self.y)
+         (overlapping:water! cranked))
+       )
       (if
        (and (playdate.buttonJustPressed playdate.kButtonA)
             state.chosen-item)
@@ -104,9 +112,9 @@
        (and (playdate.buttonJustPressed playdate.kButtonA)
             (?. overlapping :player-interact!))
        (overlapping:player-interact! true)
-          (and (playdate.buttonJustPressed playdate.kButtonA)
-               clear-square)
-          (self:shop!))
+       (and (playdate.buttonJustPressed playdate.kButtonA)
+            clear-square)
+       (self:shop!))
       )
     self)
 
@@ -141,7 +149,7 @@
     (let [image (gfx.imagetable.new :assets/images/player-sprite)
           animation (anim.new {: image :states [{:state :walking :start 1 :end 4}]})
           player (gfx.sprite.new)
-          cash  (or (?. fields cash) 10)
+          cash  (or (?. fields :cash) 10)
           item-table
           {:tulip (gfx.imagetable.new :assets/images/tulip)
            :redirect (gfx.imagetable.new :assets/images/redirect)

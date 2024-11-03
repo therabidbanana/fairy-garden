@@ -42,7 +42,7 @@
                    :gsub "%-" "%%-")
           all-files (love.filesystem.getDirectoryItems dir)
           matching  (?. (icollect [i v (ipairs all-files)]
-                          (if (string.match v prefix) v)) 1)
+                          (if (string.match v (.. "^" prefix)) v)) 1)
           ]
       (if matching
           (let [(w h) (string.match matching "%-(%d+)%-(%d+)" 2)

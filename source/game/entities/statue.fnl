@@ -6,12 +6,9 @@
    tile          (require :source.lib.behaviors.tile-movement)
    $ui           (require :source.lib.ui)]
 
-  (local cost 8)
   (fn interacted! [{:state { : dir } &as self} fairy]
     {:add-happiness 1}
     )
-
-  (fn react! [{:state { : dir : tile-h : tile-w} &as self}])
 
   (fn collisionResponse [self other]
     :overlap)
@@ -28,7 +25,6 @@
       (redirect:setCollideRect 0 0 32 32)
       (redirect:setGroups [4])
       (redirect:setCollidesWithGroups [3])
-      (tset redirect :react! react!)
       (tset redirect :interacted! interacted!)
       (tset redirect :collisionResponse collisionResponse)
       (tset redirect :state {: dir : tile-h : tile-w})

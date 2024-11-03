@@ -14,6 +14,7 @@
 (pd/import :CoreLibs/graphics)
 (pd/import :CoreLibs/sprites)
 (pd/import :CoreLibs/timer)
+(pd/import :CoreLibs/crank)
 
 (global $config {:debug true})
 

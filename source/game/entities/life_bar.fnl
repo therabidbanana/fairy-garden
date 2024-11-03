@@ -11,6 +11,7 @@
     (let [new-val (?. linked :state field)
           max-val (or max-val 8)
           frame (frame-for new-val max-val)]
+      (self:setVisible (not= new-val max-val))
       (when (not= new-val curr)
         (tset self :state :curr new-val)
         (self:setImage (image:getImage frame)))

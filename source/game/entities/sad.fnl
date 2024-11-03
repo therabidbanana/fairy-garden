@@ -4,6 +4,7 @@
   [gfx playdate.graphics
    scene-manager (require :source.lib.scene-manager)
    tile          (require :source.lib.behaviors.tile-movement)
+   life-bar      (require :source.game.entities.life_bar)
    $ui           (require :source.lib.ui)]
 
   (fn interacted! [{:state { : dir } &as self} fairy]
@@ -17,7 +18,9 @@
 
   (fn player-interact! [{:state { : dir : water : hp} &as self} primary?]
     (if (and (not primary?) (<= hp 1))
-        (self:remove)
+        (do
+          (self.life-bar:remove)
+          (self:remove))
         (not primary?)
         (tset self :state :hp (- hp 1)))
     )
@@ -41,6 +44,7 @@
       (redirect:setCollideRect 0 0 32 32)
       (redirect:setGroups [4])
       (redirect:setCollidesWithGroups [3])
+      (tset redirect :life-bar (life-bar.new! x y {:linked redirect :curr 8 :field :hp}))
       (tset redirect :react! react!)
       (tset redirect :interacted! interacted!)
       (tset redirect :player-interact! player-interact!)

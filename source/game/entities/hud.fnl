@@ -23,7 +23,7 @@
     self)
 
   (fn draw [self]
-    (let [rect (playdate.geometry.rect.new 0 0
+    (let [rect (playdate.geometry.rect.new 4 4
                                            60 20)]
       (gfx.setColor gfx.kColorWhite)
       (gfx.fillRoundRect rect 4)
@@ -32,7 +32,7 @@
       (gfx.drawRoundRect rect 4)
       (gfx.setColor gfx.kColorBlack)
       (gfx.drawText (.. "$" (or self.state.player-cash 0)) ;;(rect:insetBy 6 2)
-                             6 2
+                             10 6
                              )
       )
 

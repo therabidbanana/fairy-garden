@@ -20,15 +20,15 @@
                                  )
                              0 2
                              )
-      (gfx.setColor gfx.kColorWhite)
-      (gfx.fillRoundRect 6 14 24 14 2)
-      (gfx.setLineWidth 1)
-      (gfx.setColor gfx.kColorBlack)
-      (gfx.drawRoundRect 6 14 24 14 2)
-      (playdate.graphics.setImageDrawMode "fillBlack")
-      (self.tagFont:drawText (.. "x" (string.format "%d" self.state.speed))
-                             8 16
-                             )
+      ;; (gfx.setColor gfx.kColorWhite)
+      ;; (gfx.fillRoundRect 6 14 24 14 2)
+      ;; (gfx.setLineWidth 1)
+      ;; (gfx.setColor gfx.kColorBlack)
+      ;; (gfx.drawRoundRect 6 14 24 14 2)
+      ;; (playdate.graphics.setImageDrawMode "fillBlack")
+      ;; (self.tagFont:drawText (.. "x" (string.format "%d" self.state.speed))
+      ;;                        8 16
+      ;;                        )
       (playdate.graphics.setImageDrawMode mode)
       )
     

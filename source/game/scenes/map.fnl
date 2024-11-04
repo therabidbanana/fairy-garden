@@ -71,21 +71,19 @@
     ($particles:draw-all)
     ($ui:render!))
 
+  ;; TODO: Fixme
+  (local levels [:level_1 :level_5 :level_4 :level_2 :level_3 :level_6])
   (fn ->forward! [{: state &as $scene} game-state]
-    (let [keys (icollect [k v (pairs state.levels)] k)
-          _ (table.sort keys)
-          curr (or (?. (icollect [i v (ipairs keys)] (if (= v state.selected) i)) 1) 1)
-          new-key (or (?. keys (+ curr 1)) (?. keys 1))
+    (let [curr (or (?. (icollect [i v (ipairs levels)] (if (= v state.selected) i)) 1) 1)
+          new-key (or (?. levels (+ curr 1)) (?. levels 1))
           new-warp (?. state.levels new-key)]
       (tset state :selected new-key)
       (state.selector:moveTo new-warp.x new-warp.y))
     )
 
   (fn ->backward! [{: state &as $scene} game-state]
-    (let [keys (icollect [k v (pairs state.levels)] k)
-          _ (table.sort keys)
-          curr (or (?. (icollect [i v (ipairs keys)] (if (= v state.selected) i)) 1) 1)
-          new-key (or (?. keys (- curr 1)) (?. keys (length keys)))
+    (let [curr (or (?. (icollect [i v (ipairs levels)] (if (= v state.selected) i)) 1) 1)
+          new-key (or (?. levels (- curr 1)) (?. levels (length levels)))
           new-warp (?. state.levels new-key)]
       (tset state :selected new-key)
       (state.selector:moveTo new-warp.x new-warp.y))

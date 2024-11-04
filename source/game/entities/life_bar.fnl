@@ -27,6 +27,7 @@
       (water-bar:setCenter 0 0)
       (water-bar:setImage (image:getImage curr-frame))
       (water-bar:setBounds x y 32 8)
+      (water-bar:setZIndex 9)
       (tset water-bar :react! react!)
       (tset water-bar :state {: linked : curr : max-val : image : field})
       water-bar)))

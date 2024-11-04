@@ -27,9 +27,10 @@
           cost class.cost
           new-cash (- self.state.cash cost)]
       (when (>= new-cash 0)
-        (->
-         (class.new! ideal-x ideal-y { :fields item : tile-w : tile-h })
-         (: :add))
+        (let [new-thing (class.new! ideal-x ideal-y { :fields item : tile-w : tile-h })]
+         (new-thing:add)
+         (if (?. new-thing :life-bar) (new-thing.life-bar:add))
+         )
         (tset self.state :cash new-cash)
         (tset self.state :chosen-item nil)
         )

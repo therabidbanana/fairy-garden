@@ -8,4 +8,6 @@
  :level_6 (require :source.game.scenes.level_6)
  :minimal (require :source.game.scenes.minimal)
  :menu (require :source.game.scenes.menu)
+ :title (require :source.game.scenes.title)
+ :logo (require :source.game.scenes.logo)
  }

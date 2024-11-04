@@ -22,7 +22,7 @@
  [{: scene-manager} (require :source.lib.core)]
  (fn load-hook []
    (scene-manager:load-scenes! (require :source.game.scenes))
-   (scene-manager:select! :map)
+   (scene-manager:select! :logo)
    )
  (fn update-hook []
    (scene-manager:tick!)

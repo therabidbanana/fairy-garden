@@ -23,6 +23,10 @@
           )
         ))
 
+  (fn stage-exit! [$scene]
+    ($scene.state.music:stop)
+    )
+
   (fn stage-draw! [$scene]
     ($particles:draw-all)
     ($ui:render!)
@@ -62,11 +66,15 @@
           tree-hud (-> (entity-map.tree-hud.new! tree) (: :add))
           hud (-> (entity-map.hud.new! player) (: :add))
           chosen-item (-> (entity-map.chosen-item.new! player) (: :add))
+          music-loop (playdate.sound.fileplayer.new :assets/sounds/WereWasI)
           ]
+      (doto music-loop
+            (: :setVolume 0.3)
+            (: :play 0))
       (each [_ v (ipairs loaded.entities)]
         (if (?. v :life-bar) (v.life-bar:add)))
       (if spawner.fields.intro
           ($ui:open-textbox! {:text spawner.fields.intro})
           )
-      {: player : tree : spawner : stage-width : stage-height : graph : grid-w}
+      {: player : tree : spawner : stage-width : stage-height : graph : grid-w :music music-loop}
      )))

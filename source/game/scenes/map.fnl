@@ -27,31 +27,36 @@
           selected-level (or (?. game-state :selected) :level_1)
           warp (?. levels selected-level)
           selector (entity-map.map-selector.new! warp.x warp.y)
+          star-image (gfx.imagetable.new :assets/images/stars)
           ]
       (selector:add)
-      (tset $ :state {: levels :selected selected-level : selector : stage-height : stage-width}))
+      (tset $ :state {: levels
+                      : star-image
+                      :selected selected-level : selector : stage-height : stage-width}))
     )
 
   (fn exit! [{: state &as $scene} game-state]
     (tset game-state :selected state.selected))
 
-  (fn draw! [{: state &as $scene} game-state]
+  (fn draw! [{:state { : star-image &as state} &as $scene} game-state]
     (let [level-state (?. game-state state.selected)
           warp (?. state.levels state.selected)
           stars (or (?. level-state :stars) 0)
+          star-frame (clamp 1 (+ stars 1) 4)
           star-rect (playdate.geometry.rect.new 280 20 120 20)
           level-rect (playdate.geometry.rect.new 80 210 240 20)
           ]
       (playdate.graphics.pushContext)
       (playdate.graphics.setDrawOffset 0 0)
-      (gfx.setColor gfx.kColorWhite)
-      (gfx.fillRoundRect star-rect 4)
-      (gfx.setLineWidth 2)
-      (gfx.setColor gfx.kColorBlack)
-      (gfx.drawRoundRect star-rect 4)
-      (gfx.setColor gfx.kColorBlack)
-      (gfx.drawText (if (> stars 0) (.. "Stars: " level-state.stars)
-                        (.. "No Stars")) 286 22)
+      ;; (gfx.setColor gfx.kColorWhite)
+      ;; (gfx.fillRoundRect star-rect 4)
+      ;; (gfx.setLineWidth 2)
+      ;; (gfx.setColor gfx.kColorBlack)
+      ;; (gfx.drawRoundRect star-rect 4)
+      ;; (gfx.setColor gfx.kColorBlack)
+      (: (star-image:getImage star-frame) :draw 320 10)
+      ;; (gfx.drawText (if (> stars 0) (.. "Stars: " level-state.stars)
+      ;;                   (.. "No Stars")) 286 22)
 
       (gfx.setColor gfx.kColorWhite)
       (gfx.fillRoundRect level-rect 4)

@@ -4,7 +4,7 @@
 (deflevel :level_2
   [;; ldtk (require :source.lib.ldtk.loader)
    $ui (require :source.lib.ui)
-   {: build! : stage-draw! : stage-tick!} (require :source.game.scenes.level_builder)
+   {: build! : stage-exit! : stage-draw! : stage-tick!} (require :source.game.scenes.level_builder)
    pd playdate
    gfx pd.graphics]
 
@@ -14,6 +14,7 @@
 
   (fn exit! [$ game-state]
     (tset game-state :level_2 {:stars (or ($.state.tree:stars) 0)})
+    (stage-exit! $)
     (tset $ :state {})
     (playdate.graphics.setDrawOffset 0 0)
     )

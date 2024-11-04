@@ -49,6 +49,12 @@ Ideas:
 - [ ] Way to earn money
 - [ ] Crank to pull weeds?
 
+
+# Music
+
+Where Was I - CC0
+https://opengameart.org/content/where-was-i
+
 # Playdate Fennel Starter
 
 This starter set is intended to allow use of the Fennel language on Playdate,

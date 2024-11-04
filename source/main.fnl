@@ -16,7 +16,7 @@
 (pd/import :CoreLibs/timer)
 (pd/import :CoreLibs/crank)
 
-(global $config {:debug true})
+(global $config {:debug false})
 
 (pd/load
  [{: scene-manager} (require :source.lib.core)]

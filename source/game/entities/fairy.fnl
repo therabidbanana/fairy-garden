@@ -32,11 +32,15 @@
 
   (fn add-happiness! [{: state &as self} val]
     (let [new-hap (+ val state.happiness)]
+      (if (not (state.sounds.happy:isPlaying))
+          (state.sounds.happy:play))
       ($particles.heart! (+ self.x 6) (+ self.y 6))
       (tset state :happiness new-hap)))
 
   (fn add-sadness! [{: state &as self} val]
     (let [new-hap (+ val state.happiness)]
+      (if (not (state.sounds.sad:isPlaying))
+          (state.sounds.sad:play))
       ($particles.sad! (+ self.x 6) (+ self.y 6))
       (tset state :happiness new-hap)))
 
@@ -59,6 +63,18 @@
 
   (fn react! [{: state : height : x : y : tile-w : tile-h : width &as self} map-state]
     (let [(dx dy) (self:tile-movement-react! state.speed)
+          oob      (or (>= (+ x dx width) map-state.state.stage-width)
+                       (<= (+ x dx) 0)
+                       (>= (+ y dy height) map-state.state.stage-height)
+                       (<= (+ y dy) 0))
+
+          dx      (if (and (>= (+ x width) map-state.state.stage-width) (> dx 0)) 0
+                      (and (<= x 0) (< dx 0)) 0
+                      dx)
+          dy      (if (and (>= (+ y height) map-state.state.stage-height) (> dy 0)) 0
+                      (and (<= y 0) (< dy 0)) 0
+                      dy)
+
           stopped? (and (= dx 0) (= dy 0))]
       (if stopped?
           (do
@@ -69,6 +85,9 @@
               :left (self:->left!)
               :right (self:->right!)
               )))
+      (when oob
+        (self:->stop!)
+        (tset self :state :state :tree))
       (tset self :state :dx dx)
       (tset self :state :dy dy)
       (tset self :state :walking? (not (and (= 0 dx) (= 0 dy))))
@@ -109,7 +128,11 @@
           animation (anim.new {: image :states [{:state :standing :start 1 :end 2 :delay 2300}
                                                 {:state :walking :start 1 :end 2}
                                                 ]})
-          player (gfx.sprite.new)]
+          patron (math.random 1 3)
+          sounds {:happy (playdate.sound.sampleplayer.new (.. :assets/sounds/ooh patron))
+                  :sad   (playdate.sound.sampleplayer.new (.. :assets/sounds/oof patron))}
+          player (gfx.sprite.new)
+          ]
       (player:setCenter 0 0)
       (player:setBounds x y 24 24)
       ;; (player:setCollideRect 6 1 18 30)
@@ -129,6 +152,7 @@
       (tset player :tile-h tile-h)
       (tset player :tile-w tile-w)
       (tset player :state {: animation :speed 2 :dx 0 :dy 0 :visible true
+                           : sounds
                            :happiness 3
                            :tile-x (div x tile-w) :tile-y (div y tile-h)
                            :state :tree})

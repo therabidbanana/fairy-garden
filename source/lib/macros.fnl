@@ -35,10 +35,10 @@
                     (= t (sym :var)) name
                     (= t (sym :fn)) name))
         map (collect [_ name (ipairs names)]
-              (values (tostring name) name))]
-    `(let ,bindings
-       ,forms
-       ,map)))
+              (values (tostring name) name))
+        let-block `(let ,bindings ,(unpack forms))]
+    (table.insert let-block map)
+    let-block))
 
 (fn clamp [min x max]
   `(math.max (math.min ,x ,max) ,min))
@@ -52,12 +52,13 @@
                     (= t (sym :var)) name
                     (= t (sym :fn)) name))
         map (collect [_ name (ipairs names)]
-              (values (tostring name) name))]
-    `(let ,bindings
-       ,forms
-       (each [k# v# (pairs ,map)]
-         (tset ,module k# v#))
-       ,module)))
+              (values (tostring name) name))
+        let-block `(let ,bindings ,(unpack forms))
+        each-block `(each [k# v# (pairs ,map)] (tset ,module k# v#))
+        ]
+    (table.insert let-block each-block)
+    (table.insert let-block module)
+    let-block))
 
 (fn love-hooks [bindings ...]
   (let [code-load (defns :game bindings ...)]

@@ -8,7 +8,7 @@
 
 (defmodule _G.playdate.graphics.imagetable
   [{: split} (require :source.lib.helpers)
-   love-wrap (require :source.lib.playdate.CoreLibs.love-wrap)
+   love-wrap (require :source.lib.playdate.love-wrap)
    ]
 
   (fn getImage [{: quads : atlas} n]
